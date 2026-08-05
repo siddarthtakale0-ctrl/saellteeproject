@@ -1,0 +1,94 @@
+@import "tailwindcss";
+@import "uplot/dist/uPlot.min.css";
+
+@theme {
+  --color-panel: #10161f;
+  --color-panel-2: #161e2a;
+  --color-line: #223047;
+  --color-ink: #d7e1ee;
+  --color-dim: #7b8ba1;
+  --color-accent: #4cc2ff;
+  --color-alarm: #ff4d5e;
+  --color-ok: #37d99a;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: #0a0e14;
+  color: var(--color-ink);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.u-legend {
+  display: none;
+}
+
+@keyframes alarm-in {
+  from {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.alarm-banner {
+  animation: alarm-in 0.35s ease-out;
+}
+
+@keyframes pulse-red {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(255 77 94 / 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgb(255 77 94 / 0);
+  }
+}
+.pulse-red {
+  animation: pulse-red 1.4s infinite;
+}
+
+.md-alert h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+.md-alert h3 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin: 0.75rem 0 0.35rem;
+}
+.md-alert table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+.md-alert th,
+.md-alert td {
+  border: 1px solid var(--color-line);
+  padding: 0.2rem 0.45rem;
+  text-align: left;
+  word-break: break-word;
+}
+.md-alert th:first-child,
+.md-alert td:first-child {
+  white-space: nowrap;
+}
+.md-alert code {
+  color: var(--color-accent);
+}
+.md-alert p {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  margin: 0.4rem 0;
+}
