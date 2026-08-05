@@ -15,28 +15,8 @@ y el informe auditado apareciendo cuando el evento cierra — sin configurar nad
 | 5 | LLM | **Nada de LLM en vivo**: todo precomputado; guardarraíl con mentiras pregrabadas (§3.3) |
 | 6 | Público | Evaluador técnico / técnico del dominio |
 
-> **v2 (2026-08-05):** revisado adversarialmente contra el código. Cambios mayores frente
-> a v1: el slice necesita re-cómputo con el modelo (no solo leer artefactos) §2.2; el
-> driver SSE ejecuta `replay()` entero y pacea la emisión (no lo alimenta incrementalmente)
-> §3.2; el endpoint "brief live" se sustituye por "audita tu brief" §3.3; sin cap de
-> downsampling y bookkeeping explícito de índices §2.4; cirugía de `.gitignore` + licencia §2.3.
->
-> **v3 (2026-08-05):** segunda revisión independiente. Añadido: `audit-brief` requiere
-> desactivar el modo cache-first y una caché de auditoría aparte no canónica §3.3;
-> insumos del builder completados (`alpha_choice.npz`, JSONs de M3; p_test es local al
-> tercio 3 y hay que mapearlo a global) §2.2; política de margen sin eventos vecinos §2.4;
-> `anomaly_close` anclado en `last+gap` §3.2; schema pydantic + golden test del evento 33
-> como entregables de fase 0 §5; límites del endpoint público (tamaño, rate, timeout) §3.3.
->
-> **v4 (2026-08-05):** decisión del usuario — el visitante no escribe. Fuera el endpoint
-> `audit-brief` y todo su contrato runtime; el GuardrailShowcase pasa a mentiras
-> pregrabadas del golden set, precomputadas en el slice. La demo ya no necesita
-> `GROQ_API_KEY` en ningún despliegue y el backend es 100 % solo-lectura §3.3.
->
-> **v5 (2026-08-05):** pasada final de flujo de datos. El SSE deja de retransmitir
-> telemetría (REST la sirve una vez; SSE = reloj + momentos) §3.2; margen mínimo = gap,
-> garantizado seguro por construcción de los eventos §2.4; gzip + bootstrap de `sys.path`
-> + índice ligero para no-sliced §3.2-fin.
+> Plan cerrado el 2026-08-05 tras dos revisiones adversariales independientes contra el
+> código y una pasada final de flujo de datos. Versión única y definitiva.
 
 ---
 
@@ -185,7 +165,7 @@ pero entonces no puede importar `replay()`, así que se decide en fase 1, no sob
 | `GET /api/replay/{id}?speed=&from=` (SSE) | el stream: `telemetry`, `anomaly_start`, `anomaly_close`, `done` |
 | `GET /api/guardrail` | los casos de mentira pregrabados + veredictos del juez (§3.3) |
 
-### 3.2 El driver SSE (corregido en v2)
+### 3.2 El driver SSE
 
 `replay()` es síncrono y consume el stream entero — no se puede alimentar
 incrementalmente desde un generador asíncrono sin plomería de threads. El diseño limpio:
@@ -201,7 +181,7 @@ incrementalmente desde un generador asíncrono sin plomería de threads. El dise
    agenda**: al cruzar el `window_idx` de un momento, emite `anomaly_start`/
    `anomaly_close`. Los momentos siguen decididos por `replay()` real — el claim
    arquitectónico se mantiene — pero sin bloquear el event loop.
-3. **El SSE no retransmite telemetría** (simplificación v5): las series completas ya
+3. **El SSE no retransmite telemetría** : las series completas ya
    viajan una vez por `GET /api/events/{id}/telemetry` (el frontend las necesita igual
    para zoom/scrub) y el ChannelGrid las *revela* client-side hasta la posición del
    reloj. El SSE emite solo señales pequeñas: `tick` (~1/s, posición del reloj de misión
@@ -225,7 +205,7 @@ de cualquier import de `pipeline`/`alert` — es el requisito de los hacks de pa
 `events_index.json` lleva contexto resumido + veredicto para los 120; el detalle
 completo (alert_md, retrieval, heatmap) solo existe para los eventos sliced.
 
-### 3.3 El guardarraíl: mentiras pregrabadas, sin escribir y sin LLM en vivo (v4)
+### 3.3 El guardarraíl: mentiras pregrabadas, sin escribir y sin LLM en vivo
 
 Decisión del usuario (2026-08-05): **el visitante no escribe nada**. Queda descartado
 el endpoint `audit-brief` (y con él su contrato runtime: toggle de caché, caché de
