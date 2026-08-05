@@ -32,6 +32,11 @@ y el informe auditado apareciendo cuando el evento cierra — sin configurar nad
 > `audit-brief` y todo su contrato runtime; el GuardrailShowcase pasa a mentiras
 > pregrabadas del golden set, precomputadas en el slice. La demo ya no necesita
 > `GROQ_API_KEY` en ningún despliegue y el backend es 100 % solo-lectura §3.3.
+>
+> **v5 (2026-08-05):** pasada final de flujo de datos. El SSE deja de retransmitir
+> telemetría (REST la sirve una vez; SSE = reloj + momentos) §3.2; margen mínimo = gap,
+> garantizado seguro por construcción de los eventos §2.4; gzip + bootstrap de `sys.path`
+> + índice ligero para no-sliced §3.2-fin.
 
 ---
 
@@ -139,10 +144,12 @@ mapea desde el tercio 3, §2.2.4) y el frontend alinea por índice, no por posic
 
 **Política de margen (los eventos vecinos están cerca — separación media <2 días):**
 margen objetivo ~1.500-3.000 muestras por lado, **truncado para que nunca contenga
-ventanas marcadas de otro evento** (corte en la mitad de la distancia al vecino). Así
-el margen no muestra picos bajo α* sin banner ni mete aperturas espurias en la agenda
-del replay. Si el margen cae parcialmente fuera del tercio 3, p = null en ese tramo y
-el frontend no pinta la banda ahí.
+ventanas marcadas de otro evento**, con **mínimo garantizado = gap (100 ventanas) por
+lado**. El mínimo es siempre satisfacible por construcción: dos eventos distintos están
+separados por >gap ventanas sin marcar (`aggregate.py:69-76`, si no se fusionarían), así
+que las gap ventanas adyacentes a un evento nunca contienen marcas ajenas — y el ancla
+del `anomaly_close` (`last+gap`, §3.2) siempre cae dentro del slice. Si el margen cae
+parcialmente fuera del tercio 3, p = null en ese tramo y el frontend no pinta la banda ahí.
 
 Tamaño total estimado del slice committeado: **~10-30 MB** de JSON (agregado de §2.1).
 
@@ -190,13 +197,16 @@ incrementalmente desde un generador asíncrono sin plomería de threads. El dise
    la máquina lo "observaría" en directo es cuando se cumple el gap de silencio. Por eso
    el `anomaly_close` se ancla en **`last + gap`** (~100 ventanas ≈ 30 min de misión),
    no en `last`.
-2. El generador asíncrono recorre la telemetría con el reloj comprimido y **pacea la
-   emisión contra esa agenda**: al cruzar el `window_idx` de un momento, emite
-   `anomaly_start`/`anomaly_close`. Los momentos siguen decididos por `replay()` real —
-   el claim arquitectónico se mantiene — pero sin bloquear el event loop.
-3. **Cadencia dimensionada:** un mensaje `telemetry` cada ~100 ms de reloj real con el
-   bloque de muestras que tocan (a ×3.700, ~20-40 muestras/bloque), no un mensaje por
-   ventana (serían cientos/s).
+2. El generador asíncrono avanza el reloj comprimido y **pacea la emisión contra esa
+   agenda**: al cruzar el `window_idx` de un momento, emite `anomaly_start`/
+   `anomaly_close`. Los momentos siguen decididos por `replay()` real — el claim
+   arquitectónico se mantiene — pero sin bloquear el event loop.
+3. **El SSE no retransmite telemetría** (simplificación v5): las series completas ya
+   viajan una vez por `GET /api/events/{id}/telemetry` (el frontend las necesita igual
+   para zoom/scrub) y el ChannelGrid las *revela* client-side hasta la posición del
+   reloj. El SSE emite solo señales pequeñas: `tick` (~1/s, posición del reloj de misión
+   para sincronía), los momentos, `state`, `done`, `error`. Menos ancho de banda, cero
+   duplicación de datos, misma honestidad: los momentos vienen del servidor.
 4. **`?from=`** re-ejecuta la agenda desde el principio y suprime la emisión hasta
    `from` — la máquina de estados nunca arranca a mitad (su `on_open` en el primer
    índice visto haría un `anomaly_start` espurio). El primer mensaje tras un seek o una
@@ -209,6 +219,11 @@ incrementalmente desde un generador asíncrono sin plomería de threads. El dise
 
 **Dev:** `CORSMiddleware` en FastAPI + proxy de Vite (5173 → 8000) desde la fase 1; el
 SSE cross-origin lo exige. **Producción:** un proceso, uvicorn sirve `frontend/dist/`.
+**Además:** `GZipMiddleware` (el JSON de telemetría ~2 MB/evento comprime muy bien), y
+un módulo de bootstrap (`backend/bootstrap.py`) que inserta `src/` en `sys.path` ANTES
+de cualquier import de `pipeline`/`alert` — es el requisito de los hacks de path de §1.
+`events_index.json` lleva contexto resumido + veredicto para los 120; el detalle
+completo (alert_md, retrieval, heatmap) solo existe para los eventos sliced.
 
 ### 3.3 El guardarraíl: mentiras pregrabadas, sin escribir y sin LLM en vivo (v4)
 
