@@ -39,8 +39,16 @@ Vendored files (verbatim, unmodified):
 
 ESA-ADB itself builds on TimeEval (https://github.com/HPI-Information-Systems/TimeEval).
 
-Dataset attribution (not distributed in this repository; downloaded from Zenodo):
+Dataset attribution (not distributed in this repository, with ONE exception below;
+downloaded from Zenodo):
   ESA Anomaly Dataset (ESA-ADB), license CC BY 3.0 IGO.
   https://doi.org/10.5281/zenodo.12528696 (Mission1/Mission2)
   https://zenodo.org/records/15237121 (full record)
   Credit: European Space Agency (ESOC), KP Labs, Airbus Defence and Space.
+
+Exception — data/demo_slice/ (the web demo's committed dataset):
+  When built from real data (scripts/build_demo_slice.py on a machine holding the
+  dataset), data/demo_slice/ contains SMALL EXTRACTS of ESA-ADB Mission2 telemetry
+  (a few events with context, ~10-30 MB), redistributed under CC BY 3.0 IGO with
+  the credit above. A slice built with --synthetic contains NO dataset material
+  (generated signals only) and is marked "synthetic": true in mission.json.

@@ -1,0 +1,1560 @@
+[
+ {
+  "event_id": 0,
+  "verdict": "PASS",
+  "replayable": false,
+  "context": {
+   "event_id": 0,
+   "start": "2003-01-02T16:00:00",
+   "end": "2003-01-02T17:34:30",
+   "duration_sec": 5670.0,
+   "n_windows": 300,
+   "m2_confidence": 0.99998,
+   "intensity": 0.07764384584755304,
+   "priority": 0.29144857101805444,
+   "top_channels": [
+    [
+     "channel_23",
+     39.23934593659525
+    ],
+    [
+     "channel_20",
+     31.702427542281256
+    ],
+    [
+     "channel_18",
+     5.865922934002158
+    ],
+    [
+     "channel_26",
+     5.59720743866731
+    ],
+    [
+     "channel_28",
+     5.025188872989565
+    ],
+    [
+     "channel_21",
+     4.823353679023246
+    ],
+    [
+     "channel_19",
+     4.686268360946942
+    ],
+    [
+     "channel_27",
+     4.041258160443655
+    ],
+    [
+     "channel_24",
+     2.9771226584256194
+    ],
+    [
+     "channel_25",
+     2.539389133279197
+    ],
+    [
+     "channel_22",
+     1.2046249797155024
+    ]
+   ],
+   "dominant_channels": [
+    "channel_20",
+    "channel_23"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    8000,
+    8299
+   ]
+  },
+  "start_record": {
+   "event_id": 0,
+   "window_idx": 8000,
+   "t": "2003-01-02T16:00:00",
+   "score": 0.0030451484960629925,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9865820851317735,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_23",
+     39.23934593659525
+    ],
+    [
+     "channel_20",
+     31.702427542281256
+    ],
+    [
+     "channel_18",
+     5.865922934002158
+    ],
+    [
+     "channel_26",
+     5.59720743866731
+    ],
+    [
+     "channel_28",
+     5.025188872989565
+    ],
+    [
+     "channel_21",
+     4.823353679023246
+    ],
+    [
+     "channel_19",
+     4.686268360946942
+    ],
+    [
+     "channel_27",
+     4.041258160443655
+    ],
+    [
+     "channel_24",
+     2.9771226584256194
+    ],
+    [
+     "channel_25",
+     2.539389133279197
+    ],
+    [
+     "channel_22",
+     1.2046249797155024
+    ]
+   ]
+  }
+ },
+ {
+  "event_id": 1,
+  "verdict": "PASS",
+  "replayable": false,
+  "context": {
+   "event_id": 1,
+   "start": "2003-01-07T06:00:00",
+   "end": "2003-01-07T10:34:30",
+   "duration_sec": 16470.0,
+   "n_windows": 825,
+   "m2_confidence": 0.99998,
+   "intensity": 0.1457762652164473,
+   "priority": 0.614697688280619,
+   "top_channels": [
+    [
+     "channel_19",
+     46.15280292453093
+    ],
+    [
+     "channel_18",
+     27.392456756767746
+    ],
+    [
+     "channel_20",
+     5.838839134171968
+    ],
+    [
+     "channel_21",
+     5.412166167272087
+    ],
+    [
+     "channel_22",
+     4.78110923390569
+    ],
+    [
+     "channel_28",
+     4.596191857492994
+    ],
+    [
+     "channel_27",
+     4.2567692428335
+    ],
+    [
+     "channel_24",
+     3.066965520498688
+    ],
+    [
+     "channel_23",
+     1.5705128931858217
+    ],
+    [
+     "channel_26",
+     1.348592206371513
+    ],
+    [
+     "channel_25",
+     0.7409207118297583
+    ]
+   ],
+   "dominant_channels": [
+    "channel_18",
+    "channel_19"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    30000,
+    30899
+   ]
+  },
+  "start_record": {
+   "event_id": 1,
+   "window_idx": 30000,
+   "t": "2003-01-07T06:00:00",
+   "score": 0.003932428223243368,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9810767452104425,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_19",
+     46.15280292453093
+    ],
+    [
+     "channel_18",
+     27.392456756767746
+    ],
+    [
+     "channel_20",
+     5.838839134171968
+    ],
+    [
+     "channel_21",
+     5.412166167272087
+    ],
+    [
+     "channel_22",
+     4.78110923390569
+    ],
+    [
+     "channel_28",
+     4.596191857492994
+    ],
+    [
+     "channel_27",
+     4.2567692428335
+    ],
+    [
+     "channel_24",
+     3.066965520498688
+    ],
+    [
+     "channel_23",
+     1.5705128931858217
+    ],
+    [
+     "channel_26",
+     1.348592206371513
+    ],
+    [
+     "channel_25",
+     0.7409207118297583
+    ]
+   ]
+  }
+ },
+ {
+  "event_id": 2,
+  "verdict": "PASS",
+  "replayable": false,
+  "context": {
+   "event_id": 2,
+   "start": "2003-01-12T11:00:00",
+   "end": "2003-01-12T13:19:30",
+   "duration_sec": 8370.0,
+   "n_windows": 375,
+   "m2_confidence": 0.99998,
+   "intensity": 0.057482653510931736,
+   "priority": 0.22549165074662686,
+   "top_channels": [
+    [
+     "channel_25",
+     71.29921505335471
+    ],
+    [
+     "channel_22",
+     5.079730078318106
+    ],
+    [
+     "channel_26",
+     5.077428907673606
+    ],
+    [
+     "channel_27",
+     4.926203966232411
+    ],
+    [
+     "channel_23",
+     4.35145806101237
+    ],
+    [
+     "channel_20",
+     4.1839769707538075
+    ],
+    [
+     "channel_18",
+     3.1163770942426354
+    ],
+    [
+     "channel_21",
+     2.904335553797819
+    ],
+    [
+     "channel_28",
+     2.6311310846659595
+    ],
+    [
+     "channel_24",
+     2.218016527601226
+    ],
+    [
+     "channel_19",
+     1.7480014197798626
+    ]
+   ],
+   "dominant_channels": [
+    "channel_25"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    55000,
+    55449
+   ]
+  },
+  "start_record": {
+   "event_id": 2,
+   "window_idx": 55000,
+   "t": "2003-01-12T11:00:00",
+   "score": 0.00714245953577478,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9741785992599183,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_25",
+     71.29921505335471
+    ],
+    [
+     "channel_22",
+     5.079730078318106
+    ],
+    [
+     "channel_26",
+     5.077428907673606
+    ],
+    [
+     "channel_27",
+     4.926203966232411
+    ],
+    [
+     "channel_23",
+     4.35145806101237
+    ],
+    [
+     "channel_20",
+     4.1839769707538075
+    ],
+    [
+     "channel_18",
+     3.1163770942426354
+    ],
+    [
+     "channel_21",
+     2.904335553797819
+    ],
+    [
+     "channel_28",
+     2.6311310846659595
+    ],
+    [
+     "channel_24",
+     2.218016527601226
+    ],
+    [
+     "channel_19",
+     1.7480014197798626
+    ]
+   ]
+  }
+ },
+ {
+  "event_id": 3,
+  "verdict": "PASS",
+  "replayable": true,
+  "context": {
+   "event_id": 3,
+   "start": "2003-01-17T16:00:00",
+   "end": "2003-01-17T23:04:30",
+   "duration_sec": 25470.0,
+   "n_windows": 1325,
+   "m2_confidence": 0.99998,
+   "intensity": 0.09196532208553947,
+   "priority": 0.4052034391316145,
+   "top_channels": [
+    [
+     "channel_18",
+     35.08213368029563
+    ],
+    [
+     "channel_23",
+     29.07521272724965
+    ],
+    [
+     "channel_24",
+     10.431811347838117
+    ],
+    [
+     "channel_27",
+     4.707493715788141
+    ],
+    [
+     "channel_22",
+     4.176216289847594
+    ],
+    [
+     "channel_28",
+     3.9909507600032494
+    ],
+    [
+     "channel_19",
+     3.6280765777409156
+    ],
+    [
+     "channel_26",
+     3.6087985856465385
+    ],
+    [
+     "channel_25",
+     3.091029133787229
+    ],
+    [
+     "channel_20",
+     1.268883489702116
+    ],
+    [
+     "channel_21",
+     1.1299154044478539
+    ]
+   ],
+   "dominant_channels": [
+    "channel_18",
+    "channel_23",
+    "channel_24"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    80000,
+    81399
+   ]
+  },
+  "start_record": {
+   "event_id": 3,
+   "window_idx": 80000,
+   "t": "2003-01-17T16:00:00",
+   "score": 0.006032864446708723,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9790881079320721,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_18",
+     35.08213368029563
+    ],
+    [
+     "channel_23",
+     29.07521272724965
+    ],
+    [
+     "channel_24",
+     10.431811347838117
+    ],
+    [
+     "channel_27",
+     4.707493715788141
+    ],
+    [
+     "channel_22",
+     4.176216289847594
+    ],
+    [
+     "channel_28",
+     3.9909507600032494
+    ],
+    [
+     "channel_19",
+     3.6280765777409156
+    ],
+    [
+     "channel_26",
+     3.6087985856465385
+    ],
+    [
+     "channel_25",
+     3.091029133787229
+    ],
+    [
+     "channel_20",
+     1.268883489702116
+    ],
+    [
+     "channel_21",
+     1.1299154044478539
+    ]
+   ]
+  }
+ },
+ {
+  "event_id": 4,
+  "verdict": "PASS",
+  "replayable": false,
+  "context": {
+   "event_id": 4,
+   "start": "2003-01-23T22:00:00",
+   "end": "2003-01-23T23:19:30",
+   "duration_sec": 4770.0,
+   "n_windows": 250,
+   "m2_confidence": 0.99998,
+   "intensity": 0.12839701611203333,
+   "priority": 0.47232247252779397,
+   "top_channels": [
+    [
+     "channel_27",
+     72.60997207550521
+    ],
+    [
+     "channel_20",
+     5.401412183886892
+    ],
+    [
+     "channel_26",
+     4.8468363046729745
+    ],
+    [
+     "channel_18",
+     4.695337492168234
+    ],
+    [
+     "channel_25",
+     4.176539745561603
+    ],
+    [
+     "channel_28",
+     3.392756370882264
+    ],
+    [
+     "channel_19",
+     3.3668973757356366
+    ],
+    [
+     "channel_22",
+     1.7893373225041156
+    ],
+    [
+     "channel_23",
+     1.488731781554396
+    ],
+    [
+     "channel_24",
+     0.8075777586955328
+    ],
+    [
+     "channel_21",
+     0.7193455178700905
+    ]
+   ],
+   "dominant_channels": [
+    "channel_27"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    110000,
+    110249
+   ]
+  },
+  "start_record": {
+   "event_id": 4,
+   "window_idx": 110000,
+   "t": "2003-01-23T22:00:00",
+   "score": 0.006745680362432889,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9892964516995862,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_27",
+     72.60997207550521
+    ],
+    [
+     "channel_20",
+     5.401412183886892
+    ],
+    [
+     "channel_26",
+     4.8468363046729745
+    ],
+    [
+     "channel_18",
+     4.695337492168234
+    ],
+    [
+     "channel_25",
+     4.176539745561603
+    ],
+    [
+     "channel_28",
+     3.392756370882264
+    ],
+    [
+     "channel_19",
+     3.3668973757356366
+    ],
+    [
+     "channel_22",
+     1.7893373225041156
+    ],
+    [
+     "channel_23",
+     1.488731781554396
+    ],
+    [
+     "channel_24",
+     0.8075777586955328
+    ],
+    [
+     "channel_21",
+     0.7193455178700905
+    ]
+   ]
+  }
+ },
+ {
+  "event_id": 5,
+  "verdict": "PASS",
+  "replayable": false,
+  "context": {
+   "event_id": 5,
+   "start": "2003-01-30T04:00:00",
+   "end": "2003-01-30T07:34:30",
+   "duration_sec": 12870.0,
+   "n_windows": 625,
+   "m2_confidence": 0.99998,
+   "intensity": 0.1027725732191588,
+   "priority": 0.422355430008081,
+   "top_channels": [
+    [
+     "channel_22",
+     41.34994334684157
+    ],
+    [
+     "channel_21",
+     32.68120053966076
+    ],
+    [
+     "channel_24",
+     5.968676659504565
+    ],
+    [
+     "channel_20",
+     4.917750621841615
+    ],
+    [
+     "channel_19",
+     4.393056296469746
+    ],
+    [
+     "channel_28",
+     3.6018734552480143
+    ],
+    [
+     "channel_18",
+     2.978729687051138
+    ],
+    [
+     "channel_23",
+     1.7881086640517214
+    ],
+    [
+     "channel_27",
+     1.1306012943994443
+    ],
+    [
+     "channel_26",
+     0.7760770116508624
+    ],
+    [
+     "channel_25",
+     0.7148855727731881
+    ]
+   ],
+   "dominant_channels": [
+    "channel_21",
+    "channel_22"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    140000,
+    140699
+   ]
+  },
+  "start_record": {
+   "event_id": 5,
+   "window_idx": 140000,
+   "t": "2003-01-30T04:00:00",
+   "score": 0.009097475016473532,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9834272719810279,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_22",
+     41.34994334684157
+    ],
+    [
+     "channel_21",
+     32.68120053966076
+    ],
+    [
+     "channel_24",
+     5.968676659504565
+    ],
+    [
+     "channel_20",
+     4.917750621841615
+    ],
+    [
+     "channel_19",
+     4.393056296469746
+    ],
+    [
+     "channel_28",
+     3.6018734552480143
+    ],
+    [
+     "channel_18",
+     2.978729687051138
+    ],
+    [
+     "channel_23",
+     1.7881086640517214
+    ],
+    [
+     "channel_27",
+     1.1306012943994443
+    ],
+    [
+     "channel_26",
+     0.7760770116508624
+    ],
+    [
+     "channel_25",
+     0.7148855727731881
+    ]
+   ]
+  }
+ },
+ {
+  "event_id": 6,
+  "verdict": "PASS",
+  "replayable": false,
+  "context": {
+   "event_id": 6,
+   "start": "2003-02-05T10:00:00",
+   "end": "2003-02-05T12:34:30",
+   "duration_sec": 9270.0,
+   "n_windows": 425,
+   "m2_confidence": 0.99998,
+   "intensity": 0.098571511471163,
+   "priority": 0.39104566329412926,
+   "top_channels": [
+    [
+     "channel_28",
+     74.1408934914241
+    ],
+    [
+     "channel_22",
+     5.030416273065455
+    ],
+    [
+     "channel_20",
+     4.699268684615717
+    ],
+    [
+     "channel_18",
+     3.65503259786591
+    ],
+    [
+     "channel_21",
+     3.4802726621725135
+    ],
+    [
+     "channel_26",
+     3.203776865269624
+    ],
+    [
+     "channel_25",
+     3.163537246303216
+    ],
+    [
+     "channel_23",
+     2.5185797481472805
+    ],
+    [
+     "channel_27",
+     2.2540252846592463
+    ],
+    [
+     "channel_19",
+     1.6810890243652712
+    ],
+    [
+     "channel_24",
+     1.5504640512426944
+    ]
+   ],
+   "dominant_channels": [
+    "channel_28"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    170000,
+    170499
+   ]
+  },
+  "start_record": {
+   "event_id": 6,
+   "window_idx": 170000,
+   "t": "2003-02-05T10:00:00",
+   "score": 0.003697024750968017,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9877218829539434,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_28",
+     74.1408934914241
+    ],
+    [
+     "channel_22",
+     5.030416273065455
+    ],
+    [
+     "channel_20",
+     4.699268684615717
+    ],
+    [
+     "channel_18",
+     3.65503259786591
+    ],
+    [
+     "channel_21",
+     3.4802726621725135
+    ],
+    [
+     "channel_26",
+     3.203776865269624
+    ],
+    [
+     "channel_25",
+     3.163537246303216
+    ],
+    [
+     "channel_23",
+     2.5185797481472805
+    ],
+    [
+     "channel_27",
+     2.2540252846592463
+    ],
+    [
+     "channel_19",
+     1.6810890243652712
+    ],
+    [
+     "channel_24",
+     1.5504640512426944
+    ]
+   ]
+  }
+ },
+ {
+  "event_id": 7,
+  "verdict": "PASS",
+  "replayable": true,
+  "context": {
+   "event_id": 7,
+   "start": "2003-02-11T16:00:00",
+   "end": "2003-02-12T23:04:30",
+   "duration_sec": 111870.0,
+   "n_windows": 6125,
+   "m2_confidence": 0.99998,
+   "intensity": 0.056608438654110554,
+   "priority": 0.2858000160241166,
+   "top_channels": [
+    [
+     "channel_18",
+     30.59737266487247
+    ],
+    [
+     "channel_22",
+     16.531723675430925
+    ],
+    [
+     "channel_24",
+     16.109371048008846
+    ],
+    [
+     "channel_23",
+     14.228928940759394
+    ],
+    [
+     "channel_28",
+     5.561602590546099
+    ],
+    [
+     "channel_20",
+     5.560222624987793
+    ],
+    [
+     "channel_19",
+     4.121749657099953
+    ],
+    [
+     "channel_21",
+     4.084943088093304
+    ],
+    [
+     "channel_27",
+     4.0206383411836
+    ],
+    [
+     "channel_26",
+     3.4639107006793086
+    ],
+    [
+     "channel_25",
+     1.1183131713263004
+    ]
+   ],
+   "dominant_channels": [
+    "channel_18",
+    "channel_22",
+    "channel_23",
+    "channel_24"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    200000,
+    206199
+   ]
+  },
+  "start_record": {
+   "event_id": 7,
+   "window_idx": 200000,
+   "t": "2003-02-11T16:00:00",
+   "score": 0.004250474883817193,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9946212929122007,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_18",
+     30.59737266487247
+    ],
+    [
+     "channel_22",
+     16.531723675430925
+    ],
+    [
+     "channel_24",
+     16.109371048008846
+    ],
+    [
+     "channel_23",
+     14.228928940759394
+    ],
+    [
+     "channel_28",
+     5.561602590546099
+    ],
+    [
+     "channel_20",
+     5.560222624987793
+    ],
+    [
+     "channel_19",
+     4.121749657099953
+    ],
+    [
+     "channel_21",
+     4.084943088093304
+    ],
+    [
+     "channel_27",
+     4.0206383411836
+    ],
+    [
+     "channel_26",
+     3.4639107006793086
+    ],
+    [
+     "channel_25",
+     1.1183131713263004
+    ]
+   ]
+  }
+ },
+ {
+  "event_id": 8,
+  "verdict": "PASS",
+  "replayable": false,
+  "context": {
+   "event_id": 8,
+   "start": "2003-02-21T01:00:00",
+   "end": "2003-02-21T02:49:30",
+   "duration_sec": 6570.0,
+   "n_windows": 350,
+   "m2_confidence": 0.99998,
+   "intensity": 0.09331781046756699,
+   "priority": 0.35625300969030416,
+   "top_channels": [
+    [
+     "channel_26",
+     75.50306418071322
+    ],
+    [
+     "channel_19",
+     5.999533326037266
+    ],
+    [
+     "channel_18",
+     5.6279558269055885
+    ],
+    [
+     "channel_25",
+     5.610684493029103
+    ],
+    [
+     "channel_28",
+     4.9655068346619915
+    ],
+    [
+     "channel_23",
+     4.543366527113914
+    ],
+    [
+     "channel_22",
+     3.3747089676881674
+    ],
+    [
+     "channel_20",
+     3.367807437272682
+    ],
+    [
+     "channel_24",
+     3.2166135019700444
+    ],
+    [
+     "channel_21",
+     2.6115007642130794
+    ],
+    [
+     "channel_27",
+     1.422389207822952
+    ]
+   ],
+   "dominant_channels": [
+    "channel_26"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    245000,
+    245349
+   ]
+  },
+  "start_record": {
+   "event_id": 8,
+   "window_idx": 245000,
+   "t": "2003-02-21T01:00:00",
+   "score": 0.009770101046807103,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9801363417503345,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_26",
+     75.50306418071322
+    ],
+    [
+     "channel_19",
+     5.999533326037266
+    ],
+    [
+     "channel_18",
+     5.6279558269055885
+    ],
+    [
+     "channel_25",
+     5.610684493029103
+    ],
+    [
+     "channel_28",
+     4.9655068346619915
+    ],
+    [
+     "channel_23",
+     4.543366527113914
+    ],
+    [
+     "channel_22",
+     3.3747089676881674
+    ],
+    [
+     "channel_20",
+     3.367807437272682
+    ],
+    [
+     "channel_24",
+     3.2166135019700444
+    ],
+    [
+     "channel_21",
+     2.6115007642130794
+    ],
+    [
+     "channel_27",
+     1.422389207822952
+    ]
+   ]
+  }
+ },
+ {
+  "event_id": 9,
+  "verdict": "PASS",
+  "replayable": true,
+  "context": {
+   "event_id": 9,
+   "start": "2003-02-26T06:00:00",
+   "end": "2003-02-26T11:34:30",
+   "duration_sec": 20070.0,
+   "n_windows": 1025,
+   "m2_confidence": 0.99998,
+   "intensity": 0.08277394964561434,
+   "priority": 0.3561406306580016,
+   "top_channels": [
+    [
+     "channel_20",
+     56.06013399812076
+    ],
+    [
+     "channel_19",
+     16.31787030505814
+    ],
+    [
+     "channel_21",
+     5.5684191177318745
+    ],
+    [
+     "channel_27",
+     5.161084746995084
+    ],
+    [
+     "channel_23",
+     4.845873230107042
+    ],
+    [
+     "channel_24",
+     4.4588955587177415
+    ],
+    [
+     "channel_26",
+     3.520822936545196
+    ],
+    [
+     "channel_25",
+     2.92154779318195
+    ],
+    [
+     "channel_28",
+     1.9425115451990491
+    ],
+    [
+     "channel_22",
+     1.7224882910193697
+    ],
+    [
+     "channel_18",
+     1.2439152470517905
+    ]
+   ],
+   "dominant_channels": [
+    "channel_19",
+    "channel_20"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    270000,
+    271099
+   ]
+  },
+  "start_record": {
+   "event_id": 9,
+   "window_idx": 270000,
+   "t": "2003-02-26T06:00:00",
+   "score": 0.007514582109144102,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9989661575559798,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_20",
+     56.06013399812076
+    ],
+    [
+     "channel_19",
+     16.31787030505814
+    ],
+    [
+     "channel_21",
+     5.5684191177318745
+    ],
+    [
+     "channel_27",
+     5.161084746995084
+    ],
+    [
+     "channel_23",
+     4.845873230107042
+    ],
+    [
+     "channel_24",
+     4.4588955587177415
+    ],
+    [
+     "channel_26",
+     3.520822936545196
+    ],
+    [
+     "channel_25",
+     2.92154779318195
+    ],
+    [
+     "channel_28",
+     1.9425115451990491
+    ],
+    [
+     "channel_22",
+     1.7224882910193697
+    ],
+    [
+     "channel_18",
+     1.2439152470517905
+    ]
+   ]
+  }
+ },
+ {
+  "event_id": 10,
+  "verdict": "PASS",
+  "replayable": false,
+  "context": {
+   "event_id": 10,
+   "start": "2003-03-04T12:00:00",
+   "end": "2003-03-04T15:04:30",
+   "duration_sec": 11070.0,
+   "n_windows": 525,
+   "m2_confidence": 0.99998,
+   "intensity": 0.04168531971367247,
+   "priority": 0.16858322185606778,
+   "top_channels": [
+    [
+     "channel_25",
+     52.59400201308934
+    ],
+    [
+     "channel_24",
+     19.875890751433808
+    ],
+    [
+     "channel_27",
+     5.898961700434441
+    ],
+    [
+     "channel_19",
+     5.6336260968867355
+    ],
+    [
+     "channel_28",
+     5.560577711403226
+    ],
+    [
+     "channel_21",
+     4.335593505134405
+    ],
+    [
+     "channel_22",
+     4.165981377500581
+    ],
+    [
+     "channel_26",
+     3.2881494213957034
+    ],
+    [
+     "channel_18",
+     2.922360304113217
+    ],
+    [
+     "channel_23",
+     2.4407779314863687
+    ],
+    [
+     "channel_20",
+     1.499437298677524
+    ]
+   ],
+   "dominant_channels": [
+    "channel_24",
+    "channel_25"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    300000,
+    300599
+   ]
+  },
+  "start_record": {
+   "event_id": 10,
+   "window_idx": 300000,
+   "t": "2003-03-04T12:00:00",
+   "score": 0.006034586819210768,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9811388638852628,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_25",
+     52.59400201308934
+    ],
+    [
+     "channel_24",
+     19.875890751433808
+    ],
+    [
+     "channel_27",
+     5.898961700434441
+    ],
+    [
+     "channel_19",
+     5.6336260968867355
+    ],
+    [
+     "channel_28",
+     5.560577711403226
+    ],
+    [
+     "channel_21",
+     4.335593505134405
+    ],
+    [
+     "channel_22",
+     4.165981377500581
+    ],
+    [
+     "channel_26",
+     3.2881494213957034
+    ],
+    [
+     "channel_18",
+     2.922360304113217
+    ],
+    [
+     "channel_23",
+     2.4407779314863687
+    ],
+    [
+     "channel_20",
+     1.499437298677524
+    ]
+   ]
+  }
+ },
+ {
+  "event_id": 11,
+  "verdict": "PASS",
+  "replayable": false,
+  "context": {
+   "event_id": 11,
+   "start": "2003-03-10T18:00:00",
+   "end": "2003-03-10T20:04:30",
+   "duration_sec": 7470.0,
+   "n_windows": 400,
+   "m2_confidence": 0.99998,
+   "intensity": 0.02083688057691968,
+   "priority": 0.08070913015973732,
+   "top_channels": [
+    [
+     "channel_23",
+     74.41160954411214
+    ],
+    [
+     "channel_18",
+     5.800668984813462
+    ],
+    [
+     "channel_20",
+     5.708047467446304
+    ],
+    [
+     "channel_24",
+     4.7400860054895
+    ],
+    [
+     "channel_26",
+     4.572389433473198
+    ],
+    [
+     "channel_25",
+     4.276748773662408
+    ],
+    [
+     "channel_27",
+     3.7653553686208223
+    ],
+    [
+     "channel_22",
+     3.61763527095151
+    ],
+    [
+     "channel_19",
+     2.881360110665179
+    ],
+    [
+     "channel_21",
+     1.1868708924723403
+    ],
+    [
+     "channel_28",
+     0.570607213940203
+    ]
+   ],
+   "dominant_channels": [
+    "channel_23"
+   ],
+   "localization": "confident",
+   "shared_relations": {
+    "shared_unit": [],
+    "shared_group": []
+   },
+   "window_span": [
+    330000,
+    330399
+   ]
+  },
+  "start_record": {
+   "event_id": 11,
+   "window_idx": 330000,
+   "t": "2003-03-10T18:00:00",
+   "score": 0.007068377507013133,
+   "p": 1e-06,
+   "confidence": 0.999999,
+   "intensity_pct_vs_calib": 0.9861194911502762,
+   "intensity_label": "high",
+   "channels": [
+    [
+     "channel_23",
+     74.41160954411214
+    ],
+    [
+     "channel_18",
+     5.800668984813462
+    ],
+    [
+     "channel_20",
+     5.708047467446304
+    ],
+    [
+     "channel_24",
+     4.7400860054895
+    ],
+    [
+     "channel_26",
+     4.572389433473198
+    ],
+    [
+     "channel_25",
+     4.276748773662408
+    ],
+    [
+     "channel_27",
+     3.7653553686208223
+    ],
+    [
+     "channel_22",
+     3.61763527095151
+    ],
+    [
+     "channel_19",
+     2.881360110665179
+    ],
+    [
+     "channel_21",
+     1.1868708924723403
+    ],
+    [
+     "channel_28",
+     0.570607213940203
+    ]
+   ]
+  }
+ }
+]

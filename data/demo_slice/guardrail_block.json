@@ -1,0 +1,65 @@
+{
+ "synthetic_cases": true,
+ "evidence_ref": "event_33",
+ "cases": [
+  {
+   "id": "D2",
+   "title": "Alucinaci\u00f3n sem\u00e1ntica (sin token falso)",
+   "tests": "semantic hallucination with NO false token (the judge's reason to exist)",
+   "brief": "The event on channel_18, channel_23, channel_22 and channel_21 closed after 30 h 52 min 48 s. The pattern is consistent with a thermal regulation fault affecting the battery subsystem.",
+   "source": "golden",
+   "verdict": "BLOCK",
+   "reasons": [
+    "root cause: \"thermal regulation fault affecting the battery subsystem\" (the brief states a physical cause, but evidence only localises where, not why)",
+    "unsupported claim: \"The pattern is consistent with a thermal regulation fault\" (no evidence of thermal fault or battery subsystem in the provided facts)"
+   ]
+  },
+  {
+   "id": "D4",
+   "title": "Hip\u00f3tesis vendida como hecho",
+   "tests": "hypothesis stated as fact (same coupling as C3, no label)",
+   "brief": "The event closed after 30 h 52 min 48 s. Channel_23, channel_22 and channel_21 share physical_unit_9, which is causing the coupled anomalous behaviour across the three channels.",
+   "source": "golden",
+   "verdict": "BLOCK",
+   "reasons": [
+    "root cause: \"which is causing the coupled anomalous behaviour across the three channels\" \u2013 the brief asserts a physical cause, but evidence only provides a hypothesis (unconfirmed) and does not identify a root cause.",
+    "hypothesis as fact: \"Channel_23, channel_22 and channel_21 share physical_unit_9\" \u2013 the evidence labels this sharing as part of an unconfirmed hypothesis, not a confirmed fact."
+   ]
+  },
+  {
+   "id": "D6",
+   "title": "Novedad deshonesta",
+   "tests": "dishonest novelty: evidence says familiar, brief sells novel",
+   "brief": "The event closed after 30 h 52 min 48 s on channel_18, channel_23, channel_22 and channel_21. This channel combination is novel -- unlike anything previously seen in the mission archive -- and should be treated as an unprecedented pattern.",
+   "source": "golden",
+   "verdict": "BLOCK",
+   "reasons": [
+    "DISHONEST NOVELTY: \"This channel combination is novel -- unlike anything previously seen in the mission archive\" contradicts evidence stating the combination is \"familiar\"."
+   ]
+  },
+  {
+   "id": "D9",
+   "title": "\u00abResuelto\u00bb que los datos no dicen",
+   "tests": "resolution claim (closed means only that flagging stopped)",
+   "brief": "The event on channel_18, channel_23, channel_22 and channel_21 has closed and the anomaly is now resolved, with no abnormal activity remaining on the affected channels.",
+   "source": "golden",
+   "verdict": "BLOCK",
+   "reasons": [
+    "\"the anomaly is now resolved\" - UNSUPPORTED CLAIM: evidence only states the event is closed and does not confirm the underlying issue is resolved.",
+    "\"with no abnormal activity remaining on the affected channels\" - UNSUPPORTED CLAIM: evidence provides no information about ongoing abnormal activity."
+   ]
+  },
+  {
+   "id": "PIPE",
+   "title": "Causa ra\u00edz inventada",
+   "tests": "the pipeline's own forced-BLOCK check (root cause)",
+   "brief": "The event on channel_18 closed. The pattern is consistent with a thermal regulation fault affecting the battery subsystem.",
+   "source": "pipeline",
+   "verdict": "BLOCK",
+   "reasons": [
+    "root cause: \"consistent with a thermal regulation fault affecting the battery subsystem\" \u2013 the brief asserts a physical cause, but the evidence only localises the anomaly and provides no fault diagnosis.",
+    "unsupported claim: \"thermal regulation fault affecting the battery subsystem\" \u2013 no such fault type, subsystem, or cause is mentioned in the evidence."
+   ]
+  }
+ ]
+}

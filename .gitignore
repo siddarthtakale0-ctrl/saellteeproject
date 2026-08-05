@@ -208,6 +208,19 @@ cython_debug/
 # Todo lo demás en data/cached/ (model.pkl 48 MB, scores_continuous.npy 23 MB,
 # split.npz, p_*.npy, m3_*.json, m4_*.json…) se regenera en la máquina del usuario.
 
+# --- Excepción 2: demo slice del frontend (decisión 2026-08-05) ---
+# Se committea lo necesario para EJECUTAR EL FRONTEND DE DEMO, para que cualquiera
+# pueda visualizar el sistema en poco tiempo, sin dataset ni cómputo. Cuando se
+# construye desde datos reales contiene extractos del dataset ESA-ADB
+# (CC BY 3.0 IGO), con atribución en NOTICE. Se regenera con
+# scripts/build_demo_slice.py (máquina con dataset) o con --synthetic (cualquiera).
+!/data/demo_slice/
+/data/demo_slice/*
+!/data/demo_slice/*.json
+!/data/demo_slice/events/
+/data/demo_slice/events/*
+!/data/demo_slice/events/*.json
+
 # Artefactos intermedios del preproceso (se regeneran)
 preprocessed/
 
