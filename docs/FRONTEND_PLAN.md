@@ -20,6 +20,13 @@ y el informe auditado apareciendo cuando el evento cierra — sin configurar nad
 > driver SSE ejecuta `replay()` entero y pacea la emisión (no lo alimenta incrementalmente)
 > §3.2; el endpoint "brief live" se sustituye por "audita tu brief" §3.3; sin cap de
 > downsampling y bookkeeping explícito de índices §2.4; cirugía de `.gitignore` + licencia §2.3.
+>
+> **v3 (2026-08-05):** segunda revisión independiente. Añadido: `audit-brief` requiere
+> desactivar el modo cache-first y una caché de auditoría aparte no canónica §3.3;
+> insumos del builder completados (`alpha_choice.npz`, JSONs de M3; p_test es local al
+> tercio 3 y hay que mapearlo a global) §2.2; política de margen sin eventos vecinos §2.4;
+> `anomaly_close` anclado en `last+gap` §3.2; schema pydantic + golden test del evento 33
+> como entregables de fase 0 §5; límites del endpoint público (tamaño, rate, timeout) §3.3.
 
 ---
 
@@ -48,9 +55,10 @@ internals del detector ni recalcula detección/atribución en caliente. El front
 solo REST+SSE; nunca lee ficheros del repo.
 
 **Restricción de nombres (por los hacks de `sys.path`):** importar `pipeline.py` mete
-`src/` y `src/m3_attribution/` en `sys.path` y expone `config`, `aggregate`, `attribute`,
-`channels`, `prompts` como módulos top-level. Prohibido usar esos nombres para módulos
-de `backend/` (usar p. ej. `backend/settings.py`, nunca `backend/config.py`).
+`src/` y `src/m3_attribution/` en `sys.path`, exponiendo como módulos top-level `config`
+y todos los de `m3_attribution/`: `aggregate`, `attribute`, `baseline`, `channels`,
+`context`, `evaluate`, `visualize`. Prohibido usar esos nombres para módulos de
+`backend/` (usar p. ej. `backend/settings.py`, nunca `backend/config.py`).
 
 ## 2. El demo slice (fase 0 — la única dependencia externa)
 
@@ -78,9 +86,21 @@ que recomputarlas en la máquina del autor. `build_demo_slice.py` necesita:
    Los briefs salen de `m4_alerts.json`; las llamadas LLM son cache-hit garantizado.
 3. **Series y bandas** — test CSV (telemetría + timestamps), `scores_continuous.npy`,
    `p_test.npy`, `split.npz` (para los márgenes fuera del evento).
-4. **`guardrail_block.json`** — reconstruye el evidence del evento 33 byte-idéntico y
+4. **Índices marcados y α*** — `alpha_choice.npz` (junto a `split.npz` + `p_test.npy`
+   es lo que carga `marked_global_indices()`, `aggregate.py:44-53`). ⚠️ `p_test.npy`
+   está indexado **local al tercio 3**: el builder debe mapearlo a índices globales vía
+   `split.npz:window_third == 2`, como hace `aggregate.py:49-53` — nunca asumir que p
+   y score comparten eje directamente.
+5. **Los JSONs de M3/M4 como insumos** — `m3_events.json`, `m3_event_contexts.json`
+   (record completo, con `shared_relations` y `localization`: lo necesitan `retrieve()`,
+   `render_alert()` y `evidence_block()`) y `m4_start_windows.json`.
+6. **`guardrail_block.json`** — reconstruye el evidence del evento 33 byte-idéntico y
    **asserta cache-hit** en la llamada al juez (si hay miss, el builder falla en vez de
    pedir API key en silencio).
+
+**Golden test del builder:** el `alert_md` re-renderizado del evento 33 debe ser
+byte-idéntico a la sección "Moment 2" de `docs/m4_alert_example.md` — verificación
+gratuita de que el re-cómputo reproduce el pipeline original.
 
 Modo `--synthetic`: genera un slice con el mismo schema (senoides + anomalía inyectada)
 para desarrollar backend+frontend sin dataset. El slice real lo sustituye sin cambiar código.
@@ -102,13 +122,22 @@ para desarrollar backend+frontend sin dataset. El slice real lo sustituye sin ca
   dataset is not redistributed here" del README (pasa a "…except a small demo slice,
   attributed under CC BY 3.0 IGO") y añadir la atribución en `NOTICE`.
 
-### 2.4 Bookkeeping de índices (sin esto nada se alinea)
+### 2.4 Bookkeeping de índices y política de margen
 
-Sin downsampling: el evento 33 (~31 h ≈ 6.200 muestras a ~18 s/muestra, más margen
-~10-12k puntos) se pinta a resolución completa — trivial para uPlot en canvas. Todo el
-slice va keyed por **índice global de muestra/ventana + timestamp ISO**: ventana global
-= índice de su primera muestra (stride 1), así que score, p, heatmap y telemetría
-comparten eje y el frontend alinea por índice, no por posición de array.
+Sin downsampling: el evento 33 (~31 h ≈ 6.200 muestras a ~18 s/muestra, más margen)
+se pinta a resolución completa — trivial para uPlot en canvas. Todo el slice va keyed
+por **índice global de muestra/ventana + timestamp ISO**: ventana global = índice de su
+primera muestra (stride 1), así que score, heatmap y telemetría comparten eje (p se
+mapea desde el tercio 3, §2.2.4) y el frontend alinea por índice, no por posición.
+
+**Política de margen (los eventos vecinos están cerca — separación media <2 días):**
+margen objetivo ~1.500-3.000 muestras por lado, **truncado para que nunca contenga
+ventanas marcadas de otro evento** (corte en la mitad de la distancia al vecino). Así
+el margen no muestra picos bajo α* sin banner ni mete aperturas espurias en la agenda
+del replay. Si el margen cae parcialmente fuera del tercio 3, p = null en ese tramo y
+el frontend no pinta la banda ahí.
+
+Tamaño total estimado del slice committeado: **~10-30 MB** de JSON (agregado de §2.1).
 
 ### 2.5 Cifras de cabecera: pocas, coherentes y del mismo ámbito
 
@@ -150,7 +179,11 @@ incrementalmente desde un generador asíncrono sin plomería de threads. El dise
 
 1. Al abrir la petición, el backend ejecuta `replay()` **entero** sobre los índices
    marcados del evento (microsegundos) con callbacks que capturan la **agenda de
-   momentos**: `[(window_idx, "open"), (window_idx, "close")]`.
+   momentos**. Matiz de honestidad: `on_open` llega en el índice real, pero el close de
+   un stream de un solo evento llega por el *flush* de fin de stream — el momento en que
+   la máquina lo "observaría" en directo es cuando se cumple el gap de silencio. Por eso
+   el `anomaly_close` se ancla en **`last + gap`** (~100 ventanas ≈ 30 min de misión),
+   no en `last`.
 2. El generador asíncrono recorre la telemetría con el reloj comprimido y **pacea la
    emisión contra esa agenda**: al cruzar el `window_idx` de un momento, emite
    `anomaly_start`/`anomaly_close`. Los momentos siguen decididos por `replay()` real —
@@ -160,9 +193,13 @@ incrementalmente desde un generador asíncrono sin plomería de threads. El dise
    ventana (serían cientos/s).
 4. **`?from=`** re-ejecuta la agenda desde el principio y suprime la emisión hasta
    `from` — la máquina de estados nunca arranca a mitad (su `on_open` en el primer
-   índice visto haría un `anomaly_start` espurio).
-5. Evento terminal **`done`** al acabar: sin él, `EventSource` reconecta solo y el
-   replay entra en bucle. El cliente cierra al recibir `done`.
+   índice visto haría un `anomaly_start` espurio). El primer mensaje tras un seek o una
+   reconexión es un **snapshot de estado** (`state`: ¿hay evento abierto? ¿qué flag?)
+   para que el cliente no se quede sin el banner si entra pasado el `anomaly_start`.
+5. Eventos de control: **`done`** al acabar (sin él, `EventSource` reconecta solo y el
+   replay entra en bucle; el cliente cierra al recibirlo) y **`error`** con mensaje
+   legible ante fallos del servidor. El generador se cancela cuando el cliente
+   desconecta (no se siguen paceando bloques a nadie).
 
 **Dev:** `CORSMiddleware` en FastAPI + proxy de Vite (5173 → 8000) desde la fase 1; el
 SSE cross-origin lo exige. **Producción:** un proceso, uvicorn sirve `frontend/dist/`.
@@ -174,10 +211,26 @@ sha256 → devuelve la entrada canónica, `llm.py:61-62`), y forzar el miss cont
 borraría la caché committeada. En su lugar, la pieza live honesta y más demostrativa:
 **`POST /api/audit-brief`** — el visitante edita la prosa del brief de un evento (p. ej.
 le añade una causa raíz inventada) y el backend corre **precheck + juez reales** sobre
-su texto (input nuevo → clave nueva → llamada real a Groq) y devuelve veredicto + razones
-+ latencias. Ver al juez bloquear TU mentira en directo es mejor demo del guardarraíl
-que regenerar una prosa que ya era PASS. Sin key, el botón se deshabilita con un tooltip;
-las entradas nuevas que esto añada a la caché local no se commitean.
+su texto (el precheck necesita el evidence: se reconstruye con `evidence_block(context,
+retrieval)` desde el slice) y devuelve veredicto + razones + latencias. Ver al juez
+bloquear TU mentira en directo es mejor demo del guardarraíl que regenerar una prosa
+que ya era PASS.
+
+**Contrato runtime (verificado contra `llm.py` — sin esto el endpoint revienta al
+primer clic):** en modo cache-first un miss **lanza `RuntimeError` aunque haya API key**
+(`llm.py:63-68`, `93-98`); y en modo API cada miss **reescribe entero** el fichero de
+caché sin lock (`llm.py:80-81`). Por tanto el endpoint:
+
+- corre las llamadas del juez con `ESA_LLM_USE_CACHE=false` **y** con `LLM_CACHE`
+  redirigido a un fichero de auditoría aparte, fuera del repo (nunca el canónico
+  `m4_llm_cache.json`, que queda intocable);
+- serializa las llamadas (un worker / lock) para no corromper esa caché de auditoría;
+- límites de endpoint público: brief ≤ ~4 KB, rate limit por IP + tope diario global,
+  timeout ~20 s (nada de los sleeps de 45 s del harness batch: un 429 de Groq se
+  devuelve como 429 al cliente, no se espera dentro del request);
+- sin `GROQ_API_KEY`: 503 limpio, y `GET /api/mission` expone `audit_available: false`
+  para que el frontend deshabilite el botón con tooltip en vez de descubrirlo a golpe
+  de error.
 
 ## 4. Frontend (`frontend/`)
 
@@ -208,11 +261,11 @@ sincronizado entre las 11 gráficas); Zustand para el estado.
 
 | Fase | Entregable | Verificación |
 |---|---|---|
-| 0 | `scripts/build_demo_slice.py` (+ `--synthetic`) con los insumos de §2.2 y schema §2.1/§2.4; cirugía `.gitignore` + NOTICE/README (§2.3) | slice sintético validado contra schema; builder real asserta cache-hit del BLOCK |
+| 0 | **Schema del slice como modelos pydantic** (nombres/tipos/unidades exactos) + `scripts/build_demo_slice.py` (+ `--synthetic`) con los insumos de §2.2 y la política de margen §2.4; cirugía `.gitignore` + NOTICE/README (§2.3) | slice sintético validado contra schema; builder real: golden test del evento 33 (§2.2) + assert cache-hit del BLOCK |
 | 1 | Backend FastAPI (pins py3.9) + CORS/proxy + tests de endpoints | `pytest backend/tests` verde con slice sintético |
 | 2 | Frontend: shell, ChannelGrid, TimelineMinimap, carga estática de un evento | build limpio, evento navegable sin replay |
 | 3 | Replay SSE end-to-end (§3.2): autoplay, AlarmBanner, EventReport, `done` | los momentos salen de la agenda de `replay()` real; reconexión no duplica |
-| 4 | GuardrailShowcase + `audit-brief`, pulido del guion de 2 min | recorrido completo cronometrado |
+| 4 | GuardrailShowcase + `audit-brief` con su contrato runtime completo (§3.3: toggle de caché, caché de auditoría aparte, límites) | recorrido completo cronometrado; audit-brief probado con y sin key |
 | 5 | Integración: uvicorn sirve `dist/`, README (sección demo web), instrucciones del slice real | clon limpio → `make demo` → navegador |
 
 **Bloqueante único:** el slice real (fase 0) se genera en la máquina con el dataset y
