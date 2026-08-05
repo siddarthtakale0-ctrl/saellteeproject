@@ -87,12 +87,13 @@ para desarrollar backend+frontend sin dataset. El slice real lo sustituye sin ca
 
 ### 2.3 Gobernanza: regla de caché, `.gitignore` y licencia
 
-- **La regla se reformula, no se estira.** La regla actual ("solo si cuesta dinero o API
-  key") diría NO al slice — el PRD retiró por ella el nivel "demo desde caches"
-  (`PRD.md:70`). Se añade una **categoría nueva y explícita** al `.gitignore`: *artefacto
-  de demo web: sin él, la web de un clon limpio no muestra nada; contiene extractos del
-  dataset (CC BY 3.0 IGO) con atribución en NOTICE*. La excepción queda escrita, como la
-  del LLM.
+- **La regla se reformula, no se estira** (decisión del usuario, 2026-08-05). La regla
+  actual ("solo si cuesta dinero o API key") diría NO al slice — el PRD retiró por ella
+  el nivel "demo desde caches" (`PRD.md:70`). Se añade una **categoría nueva y explícita**
+  al `.gitignore` y al README: *se committea lo necesario para ejecutar el frontend de
+  demo, para que cualquiera pueda visualizar el sistema en poco tiempo sin dataset ni
+  cómputo; contiene extractos del dataset (CC BY 3.0 IGO) con atribución en NOTICE*.
+  La excepción queda escrita y justificada, como en su día la de la caché LLM.
 - **Cirugía del `.gitignore`:** `/data/*` está excluido y git no re-incluye ficheros
   dentro de un directorio excluido — hay que desexcluir la cadena entera
   (`!/data/demo_slice/`, `/data/demo_slice/*`, `!/data/demo_slice/**/*.json`), igual que
@@ -109,14 +110,19 @@ slice va keyed por **índice global de muestra/ventana + timestamp ISO**: ventan
 = índice de su primera muestra (stride 1), así que score, p, heatmap y telemetría
 comparten eje y el frontend alinea por índice, no por posición de array.
 
-### 2.5 Cifras de cabecera, con ámbito honesto
+### 2.5 Cifras de cabecera: pocas, coherentes y del mismo ámbito
 
-Las tres cifras ancla mezclan ámbitos distintos; `mission.json` las lleva etiquetadas:
-F0.5 = 0.949 (test completo, M1) · 0 falsas alarmas / 976k ventanas normales (tercio
-final, en α*) · 120/120 briefs PASS (tercio final). El minimapa cubre **el tercio final**
-(donde viven los 120 eventos) y lo dice en el eje — no se pinta el rango completo para
-no apelotonar los eventos ni desalinear cifras con lo visible. Nota: el scorecard real
-es 120 PASS / 0 FLAG / 0 BLOCK — el sello FLAG solo aparecerá en el showcase sintético.
+Decisión del usuario: mejor menos cifras si ganan claridad. La cabecera lleva **solo dos
+cifras, ambas del mismo ámbito** (el tramo evaluado que el minimapa muestra), formuladas
+para que cualquiera las entienda sin contexto:
+
+> **0 falsas alarmas** en 976.182 ventanas normales · **120/120 informes** aprobados por el juez
+
+El F0.5 = 0.949 (que se mide sobre el test completo, otro ámbito) sale de la cabecera y
+se muestra en un panel "sobre el sistema" con su framing correcto ("reproduce el baseline
+publicado por ESA"). El minimapa cubre **el tercio final** (donde viven los 120 eventos)
+y lo declara en el eje. Nota: el scorecard real es 120 PASS / 0 FLAG / 0 BLOCK — el sello
+FLAG solo aparecerá en el showcase sintético.
 
 ## 3. Backend (`backend/`)
 
