@@ -73,7 +73,7 @@ python3.9 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Download the **ESA-Mission2** folder (3.8 GB) from Zenodo ([doi.org/10.5281/zenodo.12528696](https://doi.org/10.5281/zenodo.12528696)) and place it at `data/ESA-Mission2/`, so that `data/ESA-Mission2/labels.csv` exists. The dataset is not redistributed here.
+Download the **ESA-Mission2** folder (3.8 GB) from Zenodo ([doi.org/10.5281/zenodo.12528696](https://doi.org/10.5281/zenodo.12528696)) and place it at `data/ESA-Mission2/`, so that `data/ESA-Mission2/labels.csv` exists. The dataset is not redistributed here (one deliberate exception: the web demo's slice — see [`NOTICE`](NOTICE)).
 
 ```bash
 jupyter notebook notebooks/demo.ipynb   # then run all cells, top to bottom
@@ -93,6 +93,28 @@ Everything runs on **CPU** (developed on a Mac laptop). No GPU, no Docker, no co
 **No API key is needed.** The committed LLM cache is not a cost saver (the model is free to run); it is a reproducibility device, because a language model is not bit-deterministic even at temperature zero, so the frozen response is the canonical reference. To regenerate briefs live instead, get a free key at [console.groq.com](https://console.groq.com), put `GROQ_API_KEY` in `.env`, and uncomment the bring-your-own-key cell in Section 4 of the notebook.
 
 The cache rule in this repo: an artifact is committed only when recomputing it costs **money or an external dependency**, never when it merely costs time. That is why preprocessing and training run on your machine, and why exactly one artifact ships: the LLM cache.
+
+## Web demo — the mission-control frontend
+
+The alarm-to-report loop, watchable in two minutes: the 11 channels replay under a
+compressed mission clock, the alarm fires the moment the pipeline's own streaming
+state machine (`replay()`, no lookahead) opens an event, and the audited closing
+report slides in when the quiet gap closes it. The moments are decided by the real
+state machine running server-side — the frontend is literally *another driver* of it.
+
+```bash
+pip install -r backend/requirements.txt
+make demo          # builds the frontend, serves everything on http://localhost:8000
+```
+
+No dataset, no API key: the demo runs from the committed `data/demo_slice/`. The slice
+in this repo is **synthetic** (schema-identical, clearly badged in the UI) until it is
+rebuilt from real artifacts with `make slice-real` on a machine holding the dataset.
+The guardrail showcase ("¿Y si el modelo mintiera?") is real either way: hand-planted
+lies from the judge's golden set, each with the judge's frozen verdict.
+
+Design decisions, data flow and the review trail live in
+[`docs/FRONTEND_PLAN.md`](docs/FRONTEND_PLAN.md).
 
 ## Repository layout
 
