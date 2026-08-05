@@ -1,0 +1,10 @@
+# Backend of the web demo. Installed ON TOP of the project venv (python 3.9):
+#   pip install -r backend/requirements.txt
+# Upper bounds chosen to keep python 3.9 compatibility (3.9 is EOL; newest
+# fastapi/uvicorn majors may require >=3.10).
+fastapi>=0.100,<1.0
+uvicorn[standard]>=0.23,<1.0
+pydantic>=2.4,<3.0
+# test-only
+pytest>=7.0
+httpx>=0.24
