@@ -1,5 +1,5 @@
 // Tiny renderer for the alert markdown (headings, tables, paragraphs, code, bold).
-// The alert_md is produced by our own backend/pipeline — not arbitrary input — so a
+// The alert_md is produced by our own backend/pipeline (not arbitrary input), so a
 // small purpose-built renderer beats shipping a full markdown library.
 import React from "react";
 

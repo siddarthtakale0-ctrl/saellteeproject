@@ -7,8 +7,8 @@ import uPlot from "uplot";
 import { Telemetry } from "../api";
 import { Phase } from "../store";
 
-const H_CH = 44;
-const H_SCORE = 84;
+const H_CH = 22;
+const H_SCORE = 54;
 
 function toEpoch(ts: string[]): number[] {
   return ts.map((t) => new Date(t).getTime() / 1000);
@@ -64,8 +64,8 @@ export default function ChannelGrid({ telemetry, cursor, phase, dominant }: Prop
       row.className = "flex items-stretch gap-2";
       const label = document.createElement("div");
       label.className =
-        "w-24 shrink-0 flex items-center justify-end pr-1 font-mono text-[10px] transition-colors";
-      label.textContent = name.replace("channel_", "ch ");
+        "w-24 shrink-0 flex items-center justify-end pr-1 text-[11px] font-mono transition-colors";
+      label.textContent = name.replace("channel_", "CH ");
       label.dataset.channel = name;
       const cell = document.createElement("div");
       cell.className = "grow";
@@ -83,7 +83,7 @@ export default function ChannelGrid({ telemetry, cursor, phase, dominant }: Prop
           series: [
             {},
             {
-              stroke: "#4cc2ff",
+              stroke: "#ffb454",
               width: 1,
               points: { show: false },
             },
@@ -101,8 +101,9 @@ export default function ChannelGrid({ telemetry, cursor, phase, dominant }: Prop
     row.className = "flex items-stretch gap-2 mt-1 border-t border-line pt-1";
     const label = document.createElement("div");
     label.className =
-      "w-24 shrink-0 flex flex-col items-end justify-center pr-1 font-mono text-[10px] text-dim";
-    label.innerHTML = "score M1<br/>p&lt;α* rojo";
+      "w-24 shrink-0 flex flex-col items-end justify-center pr-1 text-[11px] font-mono text-dim text-right leading-tight uppercase tracking-wider";
+    label.innerHTML =
+      "Rarity<br/><span style='font-size:9px;text-transform:none;letter-spacing:0'>red = anomaly</span>";
     const cell = document.createElement("div");
     cell.className = "grow";
     row.append(label, cell);
@@ -119,7 +120,7 @@ export default function ChannelGrid({ telemetry, cursor, phase, dominant }: Prop
         series: [
           {},
           { stroke: "#9aa8bb", width: 1, points: { show: false } },
-          { stroke: "#ff4d5e", width: 1.6, points: { show: false } },
+          { stroke: "#ff5343", width: 1.6, points: { show: false } },
         ],
       },
       [[epochs[0]], [null], [null]] as uPlot.AlignedData,

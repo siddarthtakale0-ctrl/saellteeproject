@@ -1,5 +1,10 @@
-// Moment 2 of M4: the closing alert. Facts table verbatim, RAG neighbors, the
-// audited brief with its verdict seal. If BLOCK: prose withheld + judge reasons.
+// The closing report. A plain-language summary up front (duration, culprit channels,
+// confidence, how familiar it is), then the written brief, and the raw verbatim tables
+// folded away behind "technical detail" for whoever wants the audit trail.
+// Ground-station styling: instrument card, monospace label header.
+import { useState } from "react";
+
+import { EventDetail } from "../api";
 import { AlertMarkdown } from "../markdown";
 
 interface Report {
@@ -9,42 +14,78 @@ interface Report {
   alert_md: string;
 }
 
-const SEAL: Record<string, { cls: string; label: string }> = {
-  PASS: { cls: "bg-ok/15 text-ok border-ok/50", label: "PASS · juez + precheck" },
-  FLAG: { cls: "bg-amber-500/15 text-amber-400 border-amber-500/50", label: "FLAG · aprobado con nota" },
-  BLOCK: { cls: "bg-alarm/15 text-alarm border-alarm/50", label: "BLOCK · prosa retenida" },
-};
+function familiarity(novelty: number | undefined): string | null {
+  if (novelty == null) return null;
+  if (novelty < 0.2) return "resembles anomalies that already happened";
+  if (novelty < 0.35) return "partly resembles past anomalies";
+  return "no clear precedent in the archive";
+}
 
 export default function EventReport({
   report,
-  onShowGuardrail,
+  detail,
 }: {
   report: Report;
-  onShowGuardrail: () => void;
+  detail: EventDetail | null;
 }) {
-  const seal = SEAL[report.verdict] ?? SEAL.PASS;
+  const [showRaw, setShowRaw] = useState(false);
+  const ctx = detail?.context;
+  const hours = ctx ? Math.round(ctx.duration_sec / 3600) : null;
+  const culprits = (ctx?.dominant_channels ?? [])
+    .map((c) => c.replace("channel_", ""))
+    .join(", ");
+  const fam = familiarity(detail?.retrieval?.novelty);
+
   return (
-    <div className="rounded border border-line bg-panel overflow-hidden">
-      <div className="flex items-center gap-3 px-3 py-2 border-b border-line bg-panel-2">
-        <span className="text-xs font-bold tracking-wide">INFORME DE CIERRE</span>
-        <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${seal.cls}`}>
-          {seal.label}
+    <div className="hudcard overflow-hidden">
+      <div className="px-3 py-2 border-b border-line bg-panel-2">
+        <span className="font-mono text-[11px] uppercase tracking-[0.12em] font-bold text-ink">
+          EVENT REPORT
         </span>
-        <button
-          onClick={onShowGuardrail}
-          className="ml-auto text-[11px] px-2.5 py-1 rounded border border-accent/50 text-accent hover:bg-accent/10 transition-colors"
-        >
-          ¿Y si el modelo mintiera? →
-        </button>
       </div>
-      <div className="p-3 max-h-[420px] overflow-y-auto">
+      <div className="p-3 max-h-[560px] overflow-y-auto text-[13px] leading-relaxed">
         {report.verdict === "BLOCK" && (
-          <div className="mb-2 text-[11px] text-alarm">
-            El brief fue retenido por el guardarraíl. Razones del juez:{" "}
-            {report.reasons.join(" · ")}
+          <div className="mb-2 text-[12px] text-alarm">
+            The report was withheld: a claim was not supported by the data
+            ({report.reasons.join(" · ")}).
           </div>
         )}
-        <AlertMarkdown md={report.alert_md} />
+
+        {ctx && (
+          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 mb-3">
+            <dt className="hud-label">Lasted</dt>
+            <dd className="text-ink tnum">{hours} hours</dd>
+            <dt className="hud-label">Culprit channels (overall)</dt>
+            <dd className="text-alarm font-semibold tnum">{culprits}</dd>
+            <dt className="hud-label">Confidence</dt>
+            <dd className="text-ink">maximum</dd>
+            {fam && (
+              <>
+                <dt className="hud-label">Archive</dt>
+                <dd className="text-ink">{fam}</dd>
+              </>
+            )}
+          </dl>
+        )}
+
+        {report.brief && (
+          <div className="mb-3">
+            <div className="hud-label mb-1">The written report (all the model writes)</div>
+            <p className="leading-relaxed text-ink/90">{report.brief}</p>
+          </div>
+        )}
+
+        <button
+          onClick={() => setShowRaw((v) => !v)}
+          className="text-[11px] text-accent hover:underline font-mono"
+        >
+          {showRaw ? "▾ hide" : "▸ show"} technical detail (verbatim table + similar cases)
+        </button>
+        {showRaw && (
+          <div className="mt-2 pt-2 border-t border-line">
+            <AlertMarkdown md={report.alert_md} />
+          </div>
+        )}
       </div>
     </div>
   );

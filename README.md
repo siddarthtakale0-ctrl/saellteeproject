@@ -4,8 +4,10 @@ Anomaly detection on real satellite telemetry that an operator can actually act 
 
 Built on **ESA-ADB**, the European Space Agency's official anomaly detection benchmark (real ESA mission telemetry, human-annotated). This project is independent and is not endorsed by ESA.
 
-> **Start here: [`notebooks/demo.ipynb`](notebooks/demo.ipynb).**
-> It is the whole system, end to end, with every output committed. Read it on GitHub to understand how it works and why it is built that way, without running a line of code. Clone it to reproduce every number below.
+> **Two ways to run this. Pick your depth:**
+>
+> - **See it move in two minutes → the web demo.** One command, no dataset, no API key. Pick an event, hit Run, and watch the whole alarm-to-report loop play out on real ESA telemetry in a mission-control console. Jump to [Web demo](#web-demo-the-mission-control-frontend).
+> - **Understand every number → [`notebooks/demo.ipynb`](notebooks/demo.ipynb).** The whole system, end to end, with every output committed. Read it on GitHub to see how it works and why it is built that way, without running a line of code. Clone it to reproduce every figure below.
 
 ---
 
@@ -73,7 +75,7 @@ python3.9 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Download the **ESA-Mission2** folder (3.8 GB) from Zenodo ([doi.org/10.5281/zenodo.12528696](https://doi.org/10.5281/zenodo.12528696)) and place it at `data/ESA-Mission2/`, so that `data/ESA-Mission2/labels.csv` exists. The dataset is not redistributed here (one deliberate exception: the web demo's slice — see [`NOTICE`](NOTICE)).
+Download the **ESA-Mission2** folder (3.8 GB) from Zenodo ([doi.org/10.5281/zenodo.12528696](https://doi.org/10.5281/zenodo.12528696)) and place it at `data/ESA-Mission2/`, so that `data/ESA-Mission2/labels.csv` exists. The dataset is not redistributed here (one deliberate exception: the web demo's slice, see [`NOTICE`](NOTICE)).
 
 ```bash
 jupyter notebook notebooks/demo.ipynb   # then run all cells, top to bottom
@@ -94,24 +96,31 @@ Everything runs on **CPU** (developed on a Mac laptop). No GPU, no Docker, no co
 
 The cache rule in this repo: an artifact is committed only when recomputing it costs **money or an external dependency**, never when it merely costs time. That is why preprocessing and training run on your machine, and why exactly one artifact ships: the LLM cache.
 
-## Web demo — the mission-control frontend
+## Web demo: the mission-control frontend
 
-The alarm-to-report loop, watchable in two minutes: the 11 channels replay under a
-compressed mission clock, the alarm fires the moment the pipeline's own streaming
-state machine (`replay()`, no lookahead) opens an event, and the audited closing
-report slides in when the quiet gap closes it. The moments are decided by the real
-state machine running server-side — the frontend is literally *another driver* of it.
+The whole alarm-to-report loop, watchable in two minutes and readable by anyone: the
+11 channels replay under a compressed mission clock, the alarm fires the moment the
+pipeline's own streaming state machine (`replay()`, no lookahead) opens an event and
+names the channels that **trip first**, the culprit channels light up with their share
+of the blame as the event unfolds, and the audited written report (which names the
+channels to blame **over the whole event**) slides in when the quiet gap closes it.
+Those two channel lists can differ, and deliberately so: the alarm reports onset with
+no look-ahead, while the report aggregates the finished event. The moments are decided
+by the real state machine running server-side. The frontend is literally *another
+driver* of it.
 
 ```bash
 pip install -r backend/requirements.txt
 make demo          # builds the frontend, serves everything on http://localhost:8000
 ```
 
-No dataset, no API key: the demo runs from the committed `data/demo_slice/`. The slice
-in this repo is **synthetic** (schema-identical, clearly badged in the UI) until it is
-rebuilt from real artifacts with `make slice-real` on a machine holding the dataset.
-The guardrail showcase ("¿Y si el modelo mintiera?") is real either way: hand-planted
-lies from the judge's golden set, each with the judge's frozen verdict.
+Then open **http://localhost:8000**, pick an event, and hit Run. No dataset and no API
+key required: the demo runs entirely from the committed `data/demo_slice/`, a small
+**real** ESA-ADB extract of three replayable events (badged in the UI; see
+[`NOTICE`](NOTICE)). Every figure on screen (the calibrated confidence, the culprit
+channels, the written brief) is lifted verbatim from the pipeline's cached outputs;
+the model invents nothing. The console is a ground-station instrument panel, in plain
+English, with no internal jargon on show.
 
 Design decisions, data flow and the review trail live in
 [`docs/FRONTEND_PLAN.md`](docs/FRONTEND_PLAN.md).

@@ -1,17 +1,15 @@
-// Zustand store — the single client-side state. The REPLAY DATA comes once via
+// Zustand store. The single client-side state: the REPLAY DATA comes once via
 // REST; the SSE stream carries only time (ticks) and the moments decided by the
 // backend's real replay() state machine. The charts reveal up to the cursor.
 import { create } from "zustand";
 
 import {
   EventDetail,
-  Guardrail,
   IndexEntry,
   Mission,
   Telemetry,
   fetchEvent,
   fetchEvents,
-  fetchGuardrail,
   fetchMission,
   fetchTelemetry,
   openReplay,
@@ -29,7 +27,6 @@ interface ClosePayload {
 interface State {
   mission: Mission | null;
   eventsIndex: IndexEntry[];
-  guardrail: Guardrail | null;
   error: string | null;
 
   currentEventId: number | null;
@@ -43,7 +40,6 @@ interface State {
   phase: Phase;
   flagText: string | null;
   report: ClosePayload | null;
-  showGuardrail: boolean;
   done: boolean;
 
   boot: () => Promise<void>;
@@ -52,7 +48,6 @@ interface State {
   pause: () => void;
   restart: () => void;
   setSpeed: (s: number) => void;
-  setShowGuardrail: (v: boolean) => void;
 }
 
 let closeStream: (() => void) | null = null;
@@ -87,7 +82,6 @@ export const useStore = create<State>((set, get) => {
   return {
     mission: null,
     eventsIndex: [],
-    guardrail: null,
     error: null,
     currentEventId: null,
     detail: null,
@@ -99,17 +93,15 @@ export const useStore = create<State>((set, get) => {
     phase: "idle",
     flagText: null,
     report: null,
-    showGuardrail: false,
     done: false,
 
     boot: async () => {
       try {
-        const [mission, eventsIndex, guardrail] = await Promise.all([
+        const [mission, eventsIndex] = await Promise.all([
           fetchMission(),
           fetchEvents(),
-          fetchGuardrail(),
         ]);
-        set({ mission, eventsIndex, guardrail });
+        set({ mission, eventsIndex });
         await get().selectEvent(mission.autoplay_event_id, true);
       } catch (e) {
         set({ error: String(e) });
@@ -158,6 +150,5 @@ export const useStore = create<State>((set, get) => {
       set({ speed: s });
       if (get().playing) startStream(get().cursor);
     },
-    setShowGuardrail: (v) => set({ showGuardrail: v }),
   };
 });

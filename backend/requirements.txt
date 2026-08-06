@@ -5,6 +5,14 @@
 fastapi>=0.100,<1.0
 uvicorn[standard]>=0.23,<1.0
 pydantic>=2.4,<3.0
+# The demo backend is "another driver" of the real state machine: it imports
+# replay() from src/m4_report/pipeline.py, which pulls numpy/pandas/dotenv (replay
+# itself calls np.sort). Pins match the main requirements.txt so a demo-only install
+# and a full notebook install agree, and stay python-3.9 compatible (newer
+# numpy/pandas drop 3.9). No LLM deps: briefs come from the committed cache.
+numpy==1.23.5
+pandas==1.5.3
+python-dotenv==1.2.1
 # test-only
 pytest>=7.0
 httpx>=0.24

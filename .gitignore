@@ -235,3 +235,6 @@ preprocessed/
 # Tooling interno / docs de trabajo — no viajan al repo público
 SKILLS_USAGE.md
 CLAUDE.md
+
+# Playwright MCP session artifacts
+.playwright-mcp/

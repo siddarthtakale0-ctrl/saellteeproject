@@ -1,18 +1,25 @@
-// Mission-control layout. Autoplay starts on load: channels reveal with the
-// compressed clock, the alarm banner fires on the machine's anomaly_start, the
-// audited report slides in on anomaly_close, and the guardrail showcase is one
-// click away. The 2-minute tour needs zero configuration.
+// Mission-control layout. Pick an event, hit Run, watch the 11 sensors replay
+// under a fast clock; the alarm fires when the system opens the anomaly, the
+// culprit channels light up, and the written report appears when it closes.
+// Plain language, one job per area, no internal jargon. Ground-station styling:
+// amber phosphor, monospace labels, hairline instrument cards.
 import { useEffect } from "react";
 
 import AlarmBanner from "./components/AlarmBanner";
 import AttributionStrip from "./components/AttributionStrip";
 import ChannelGrid from "./components/ChannelGrid";
 import EventReport from "./components/EventReport";
-import GuardrailShowcase from "./components/GuardrailShowcase";
+import EventSelector from "./components/EventSelector";
 import MissionHeader from "./components/MissionHeader";
 import PlaybackControls from "./components/PlaybackControls";
-import TimelineMinimap from "./components/TimelineMinimap";
 import { useStore } from "./store";
+
+const PHASE: Record<string, { text: string; cls: string; dot: string }> = {
+  watching: { text: "WATCHING", cls: "text-dim", dot: "bg-dim" },
+  alarm: { text: "ANOMALY IN COURSE", cls: "text-alarm font-bold", dot: "bg-alarm animate-pulse" },
+  closed: { text: "EVENT CLOSED", cls: "text-ok font-semibold", dot: "bg-ok" },
+  idle: { text: "READY", cls: "text-dim", dot: "bg-dim" },
+};
 
 export default function App() {
   const s = useStore();
@@ -24,11 +31,10 @@ export default function App() {
   if (s.error) {
     return (
       <div className="h-full flex items-center justify-center p-8">
-        <div className="max-w-md rounded border border-alarm/50 bg-alarm/10 p-4 text-sm">
-          <b>Error:</b> {s.error}
+        <div className="hudcard max-w-md p-4 text-sm border-alarm/50">
+          <b className="text-alarm">Error:</b> {s.error}
           <p className="text-dim text-xs mt-2">
-            ¿Está el backend arrancado? <code>make demo</code> o{" "}
-            <code>uvicorn backend.app:app --port 8000</code>
+            Is the server running? <code className="text-accent">make demo</code>
           </p>
         </div>
       </div>
@@ -36,13 +42,14 @@ export default function App() {
   }
   if (!s.mission) {
     return (
-      <div className="h-full flex items-center justify-center text-dim text-sm animate-pulse">
-        Cargando el slice de misión…
+      <div className="h-full flex items-center justify-center text-dim text-sm animate-pulse font-mono">
+        Booting…
       </div>
     );
   }
 
   const dominant = s.detail?.context.dominant_channels ?? [];
+  const ph = PHASE[s.phase] ?? PHASE.idle;
 
   return (
     <div className="h-full flex flex-col">
@@ -50,27 +57,33 @@ export default function App() {
 
       {s.phase === "alarm" && s.flagText && <AlarmBanner flagText={s.flagText} />}
 
-      <main className="grow flex gap-3 p-4 min-h-0">
-        <section className="grow min-w-0 flex flex-col gap-2">
-          <div className="flex items-center gap-3">
-            <PlaybackControls />
-            <div className="text-[11px] text-dim">
-              {s.detail && (
-                <>
-                  evento <b className="text-ink">#{s.detail.event_id}</b> ·{" "}
-                  {s.detail.context.localization} · prioridad{" "}
-                  {s.detail.context.priority.toFixed(2)}
-                  {s.phase === "watching" && " · vigilando telemetría…"}
-                  {s.phase === "alarm" && (
-                    <span className="text-alarm font-bold"> · EVENTO ABIERTO</span>
-                  )}
-                  {s.phase === "closed" && " · evento cerrado, informe emitido"}
-                </>
-              )}
-            </div>
+      {/* control bar: pick an event · current state · playback */}
+      <div className="flex items-center gap-4 flex-wrap px-4 py-2.5 border-b border-line bg-panel">
+        <EventSelector
+          events={s.eventsIndex}
+          currentId={s.currentEventId}
+          onSelect={(id) => void s.selectEvent(id, false)}
+        />
+        <div className="ml-auto flex items-center gap-4">
+          <div className="flex items-center gap-2 text-[13px] font-mono">
+            <span className={`inline-block w-2.5 h-2.5 ${ph.dot}`} />
+            <span className={ph.cls}>{ph.text}</span>
           </div>
+          <PlaybackControls />
+        </div>
+      </div>
 
-          <div className="grow overflow-y-auto rounded border border-line bg-panel p-2">
+      <main className="grow flex gap-4 p-4 min-h-0">
+        {/* left: the sensors + what we derive from them */}
+        <section className="grow min-w-0 flex flex-col gap-2">
+          <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] font-semibold text-ink">
+            Telemetry · the satellite's 11 sensors
+            <span className="text-dim font-normal normal-case tracking-normal">
+              {" "}
+              (one line per sensor, drawn as the clock advances)
+            </span>
+          </h2>
+          <div className="hudcard grow overflow-y-auto p-3">
             {s.telemetry ? (
               <>
                 <ChannelGrid
@@ -80,82 +93,46 @@ export default function App() {
                   dominant={dominant}
                   alphaStar={s.mission.alpha_star}
                 />
-                <div className="mt-1">
+                <div className="mt-2">
                   <AttributionStrip telemetry={s.telemetry} cursor={s.cursor} />
                 </div>
               </>
             ) : (
-              <div className="h-full flex items-center justify-center text-dim text-sm animate-pulse">
-                Cargando telemetría del evento…
+              <div className="h-full flex items-center justify-center text-dim text-sm animate-pulse font-mono">
+                Loading telemetry…
               </div>
             )}
           </div>
-
-          <TimelineMinimap
-            mission={s.mission}
-            events={s.eventsIndex}
-            currentId={s.currentEventId}
-            onSelect={(id) => void s.selectEvent(id)}
-          />
         </section>
 
+        {/* right: the report (only after the event closes) */}
         <aside className="w-[440px] shrink-0 flex flex-col gap-3 min-h-0 overflow-y-auto">
           {s.phase === "closed" && s.report ? (
-            <EventReport report={s.report} onShowGuardrail={() => s.setShowGuardrail(true)} />
+            <EventReport report={s.report} detail={s.detail} />
           ) : (
-            <div className="rounded border border-line bg-panel p-4 text-[12px] text-dim leading-relaxed">
-              <b className="text-ink">Cómo leer esta pantalla.</b> Los 11 canales se
-              reproducen con reloj comprimido. Cuando la máquina de estados del pipeline
-              (<code>replay()</code>, sin lookahead) abre un evento, salta la{" "}
-              <span className="text-alarm">alarma</span> con el flag determinista y se
-              iluminan los canales señalados por la atribución. Al volver la calma
-              (gap de {s.mission.gap} ventanas), el evento cierra y llega el{" "}
-              <b className="text-ink">informe auditado</b>: tablas verbatim, vecinos del
-              archivo y un brief que pasó dos guardarraíles (precheck léxico Y juez LLM).
-              <div className="mt-3">
-                <button
-                  onClick={() => s.setShowGuardrail(true)}
-                  className="text-[11px] px-2.5 py-1 rounded border border-accent/50 text-accent hover:bg-accent/10 transition-colors"
-                >
-                  ¿Y si el modelo mintiera? →
-                </button>
+            <div className="hudcard p-4 text-[13px] text-dim leading-relaxed">
+              <b className="text-ink">What you're watching.</b> The satellite's 11 sensors
+              replay under a fast clock. When the system detects an anomaly, the{" "}
+              <span className="text-alarm font-semibold">alarm</span> fires and names the
+              channels that <b className="text-ink">trip first</b>. As the event unfolds the
+              culprit channels light up with their share of the blame. When it ends, the{" "}
+              <b className="text-ink">written report</b> names the channels to blame{" "}
+              <b className="text-ink">over the whole event</b>, which can differ from the
+              first few.
+              <div className="mt-3 text-dim">
+                Pick an event above and hit <b className="text-accent font-mono">▶ RUN</b>.
               </div>
             </div>
           )}
 
-          {s.detail?.retrieval && s.phase !== "closed" && (
-            <div className="rounded border border-line bg-panel p-3">
-              <div className="text-[10px] font-bold text-dim tracking-wide mb-1.5">
-                ARCHIVO · anomalías pasadas similares (RAG determinista)
-              </div>
-              {s.detail.retrieval.neighbors.slice(0, 4).map((n) => (
-                <div key={n.id} className="flex items-center gap-2 text-[11px] font-mono py-0.5">
-                  <span className="text-accent">{n.id}</span>
-                  <div className="grow h-1.5 rounded bg-panel-2 overflow-hidden">
-                    <div className="h-full bg-accent/60" style={{ width: `${n.sim * 100}%` }} />
-                  </div>
-                  <span className="text-dim">{n.sim.toFixed(2)}</span>
-                </div>
-              ))}
-              <div className="text-[10px] text-dim mt-1">
-                novedad de la combinación: {s.detail.retrieval.novelty.toFixed(3)}
-              </div>
-            </div>
-          )}
-
-          <div className="rounded border border-line bg-panel p-3 text-[10.5px] text-dim leading-relaxed">
-            <b className="text-ink text-[11px]">Sobre el sistema.</b>{" "}
-            Detección F0.5 = {s.mission.about.f05} ({s.mission.about.f05_scope}) — reproduce
-            el baseline publicado por ESA. La capa diferencial va encima: p-values
-            conformales (α* = {s.mission.alpha_star}), atribución por contrafactual, y un
-            LLM que solo redacta — las cifras nunca pasan por él. {s.mission.about.note}
+          <div className="hudcard p-3 text-[11px] text-dim leading-relaxed">
+            <b className="text-ink">In one line.</b> The detector matches ESA's published
+            baseline (F0.5 = {s.mission.about.f05}). What we add on top: a calibrated
+            confidence, knowing which channel is to blame, and a written report whose
+            figures the model never invents. Real ESA-ADB data (excerpt).
           </div>
         </aside>
       </main>
-
-      {s.showGuardrail && s.guardrail && (
-        <GuardrailShowcase guardrail={s.guardrail} onClose={() => s.setShowGuardrail(false)} />
-      )}
     </div>
   );
 }

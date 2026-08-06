@@ -1,4 +1,4 @@
-// API client — the frontend speaks ONLY REST + SSE; it never reads repo files.
+// API client. The frontend speaks ONLY REST + SSE; it never reads repo files.
 // Types mirror backend/slice_schema.py (the single contract).
 
 export interface Mission {

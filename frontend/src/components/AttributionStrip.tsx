@@ -1,6 +1,7 @@
-// Attribution heatmap: channel x marked-window blame (%), revealed with the cursor.
-// One canvas, columns = the event's marked windows, rows = the 11 channels.
-import { useEffect, useMemo, useRef } from "react";
+// Which channels are to blame, and how much. One horizontal bar per channel = its
+// average share of the blame over the marked windows seen so far. Far clearer than a
+// thousand-column heatmap: you read "CH18 → 31%" at a glance.
+import { useMemo } from "react";
 
 import { Telemetry } from "../api";
 
@@ -11,10 +12,8 @@ export default function AttributionStrip({
   telemetry: Telemetry;
   cursor: number;
 }) {
-  const ref = useRef<HTMLCanvasElement>(null);
   const { attribution } = telemetry;
   const nWin = attribution.window_idx.length;
-  const nCh = attribution.channels.length;
 
   const revealedCols = useMemo(() => {
     let n = 0;
@@ -22,40 +21,48 @@ export default function AttributionStrip({
     return n;
   }, [attribution, cursor, nWin]);
 
-  useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas || nWin === 0) return;
-    const W = canvas.clientWidth;
-    const H = canvas.clientHeight;
-    canvas.width = W * devicePixelRatio;
-    canvas.height = H * devicePixelRatio;
-    const ctx = canvas.getContext("2d")!;
-    ctx.scale(devicePixelRatio, devicePixelRatio);
-    ctx.clearRect(0, 0, W, H);
-
-    const cw = W / nWin;
-    const chH = H / nCh;
-    for (let c = 0; c < revealedCols; c++) {
-      for (let r = 0; r < nCh; r++) {
-        const v = attribution.matrix[c][r] / 100; // pct share -> 0..1
-        if (v <= 0.005) continue;
-        ctx.fillStyle = `rgba(255, 77, 94, ${Math.min(1, 0.08 + v * 1.6)})`;
-        ctx.fillRect(c * cw, r * chH, Math.max(cw, 0.5), chH - 0.5);
-      }
-    }
-  }, [attribution, revealedCols, nWin, nCh]);
+  const bars = useMemo(() => {
+    const nCh = attribution.channels.length;
+    const sum = new Array(nCh).fill(0);
+    for (let c = 0; c < revealedCols; c++)
+      for (let r = 0; r < nCh; r++) sum[r] += attribution.matrix[c][r];
+    return attribution.channels
+      .map((ch, r) => ({ ch, pct: revealedCols ? sum[r] / revealedCols : 0 }))
+      .filter((b) => b.pct >= 1)
+      .sort((a, b) => b.pct - a.pct);
+  }, [attribution, revealedCols]);
 
   if (nWin === 0) return null;
   return (
-    <div className="flex items-stretch gap-2">
-      <div className="w-24 shrink-0 flex items-center justify-end pr-1 font-mono text-[10px] text-dim">
-        atribución M3
+    <div className="flex items-start gap-2 border-t border-line pt-2 mt-1">
+      <div className="w-24 shrink-0 pr-1 hud-label text-right leading-tight pt-0.5">
+        Blame
+        <br />
+        <span className="normal-case tracking-normal" style={{ fontSize: 9 }}>
+          whole event · %
+        </span>
       </div>
-      <div className="grow relative h-[52px]">
-        <canvas ref={ref} className="w-full h-full rounded-sm bg-panel" />
-        {revealedCols === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-[10px] text-dim">
-            (se pinta cuando el detector marca ventanas)
+      <div className="grow">
+        {revealedCols === 0 ? (
+          <div className="text-[10px] text-dim py-2 font-mono">(appears when the anomaly fires)</div>
+        ) : (
+          <div className="flex flex-col gap-1">
+            {bars.map((b) => (
+              <div key={b.ch} className="flex items-center gap-2">
+                <span className="w-16 shrink-0 text-[11px] text-right text-ink font-mono">
+                  {b.ch.replace("channel_", "CH ")}
+                </span>
+                <div className="grow h-4 bg-panel-2 overflow-hidden">
+                  <div
+                    className="h-full bg-alarm/70"
+                    style={{ width: `${Math.min(100, b.pct)}%` }}
+                  />
+                </div>
+                <span className="w-9 shrink-0 text-[11px] text-dim tabular-nums text-right font-mono">
+                  {b.pct.toFixed(0)}%
+                </span>
+              </div>
+            ))}
           </div>
         )}
       </div>

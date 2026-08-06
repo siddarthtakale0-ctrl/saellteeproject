@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -83,7 +84,7 @@ def _sse(event: str, data: dict) -> str:
 @app.get("/api/replay/{event_id}")
 async def replay_stream(event_id: int, request: Request,
                         speed: float = settings.DEFAULT_SPEED,
-                        from_idx: int | None = None) -> StreamingResponse:
+                        from_idx: Optional[int] = None) -> StreamingResponse:
     detail = SLICE.events.get(event_id)
     if detail is None:
         raise HTTPException(404, f"event {event_id} has no replay data in this slice")

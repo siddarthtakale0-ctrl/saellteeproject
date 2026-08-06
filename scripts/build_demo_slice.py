@@ -280,16 +280,16 @@ def build_synthetic() -> None:
         "time_range": {"start": iso(0), "end": iso(specs[-1][1] + specs[-1][2] + 5000)},
         "headline": {
             "false_alarms": {"value": 0, "normal_windows": 976_182,
-                             "scope": "DATOS SINTÉTICOS de demo — en los datos reales: "
-                                      "tercio final del test, en el umbral α*"},
+                             "scope": "SYNTHETIC demo data — in the real data: "
+                                      "final third of the test, at threshold alpha*"},
             "briefs": {"passed": 120, "total": 120,
-                       "scope": "DATOS SINTÉTICOS de demo — en los datos reales: 120 "
-                                "eventos del tercio final, generador auditado"},
+                       "scope": "SYNTHETIC demo data — in the real data: 120 "
+                                "events of the final third, audited generator"},
         },
         "about": {"f05": 0.949,
-                  "f05_scope": "test completo de Misión2 ligera (no el rango del minimapa)",
-                  "note": "Slice SINTÉTICO para desarrollo. Sustituir ejecutando "
-                          "scripts/build_demo_slice.py en una máquina con el dataset."},
+                  "f05_scope": "full Mission-2-light test (not the minimap range)",
+                  "note": "SYNTHETIC slice for development. Replace by running "
+                          "scripts/build_demo_slice.py on a machine with the dataset."},
         "events_total": len(specs),
         "replayable_event_ids": replayable,
         "autoplay_event_id": star,
@@ -465,15 +465,15 @@ def build_real(event_ids: list[int] | None) -> None:
                        "end": ts.iloc[t3_hi + WS - 1].isoformat()},
         "headline": {
             "false_alarms": {"value": 0, "normal_windows": 976_182,
-                             "scope": "ventanas certificadas normales del tercio final "
-                                      "del test, en el umbral derivado α*"},
+                             "scope": "certified-normal windows in the test's final "
+                                      "third, at the derived threshold alpha*"},
             "briefs": {"passed": 120, "total": 120,
-                       "scope": "los 120 eventos del tercio final; brief aprobado por "
-                                "precheck Y juez"},
+                       "scope": "the 120 events of the final third; brief passed by "
+                                "both precheck AND judge"},
         },
         "about": {"f05": 0.949,
-                  "f05_scope": "test completo de Misión2 ligera (no el rango del minimapa)",
-                  "note": "Datos reales ESA-ADB Misión2 (extracto). Ver NOTICE."},
+                  "f05_scope": "full Mission-2-light test (not the minimap range)",
+                  "note": "Real ESA-ADB Mission-2 data (excerpt). See NOTICE."},
         "events_total": len(contexts),
         "replayable_event_ids": sorted(event_files),
         "autoplay_event_id": 33,
@@ -487,6 +487,8 @@ def _write_slice(mission: dict, index: list[dict], events: dict[int, dict],
                  guardrail: dict) -> None:
     events_dir = SLICE_DIR / "events"
     events_dir.mkdir(parents=True, exist_ok=True)
+    for stale in events_dir.glob("*.json"):  # a previous run may have sliced other ids
+        stale.unlink()
     (SLICE_DIR / "mission.json").write_text(json.dumps(mission, indent=1))
     (SLICE_DIR / "events_index.json").write_text(json.dumps(index, indent=1))
     (SLICE_DIR / "guardrail_block.json").write_text(json.dumps(guardrail, indent=1))

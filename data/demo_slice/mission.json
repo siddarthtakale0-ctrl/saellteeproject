@@ -1,48 +1,48 @@
 {
- "synthetic": true,
- "channels": [
-  "channel_18",
-  "channel_19",
-  "channel_20",
-  "channel_21",
-  "channel_22",
-  "channel_23",
-  "channel_24",
-  "channel_25",
-  "channel_26",
-  "channel_27",
-  "channel_28"
- ],
- "window_size": 17,
- "gap": 100,
- "alpha_star": 2e-05,
- "sample_period_sec": 18.0,
- "time_range": {
-  "start": "2003-01-01T00:00:00",
-  "end": "2003-03-11T21:00:00"
- },
- "headline": {
-  "false_alarms": {
-   "value": 0,
-   "normal_windows": 976182,
-   "scope": "DATOS SINT\u00c9TICOS de demo \u2014 en los datos reales: tercio final del test, en el umbral \u03b1*"
+  "synthetic": false,
+  "channels": [
+    "channel_18",
+    "channel_19",
+    "channel_20",
+    "channel_21",
+    "channel_22",
+    "channel_23",
+    "channel_24",
+    "channel_25",
+    "channel_26",
+    "channel_27",
+    "channel_28"
+  ],
+  "window_size": 17,
+  "gap": 100,
+  "alpha_star": 2e-05,
+  "sample_period_sec": 18.0,
+  "time_range": {
+    "start": "2002-11-30T07:57:36",
+    "end": "2003-07-01T00:00:00"
   },
-  "briefs": {
-   "passed": 120,
-   "total": 120,
-   "scope": "DATOS SINT\u00c9TICOS de demo \u2014 en los datos reales: 120 eventos del tercio final, generador auditado"
-  }
- },
- "about": {
-  "f05": 0.949,
-  "f05_scope": "test completo de Misi\u00f3n2 ligera (no el rango del minimapa)",
-  "note": "Slice SINT\u00c9TICO para desarrollo. Sustituir ejecutando scripts/build_demo_slice.py en una m\u00e1quina con el dataset."
- },
- "events_total": 12,
- "replayable_event_ids": [
-  3,
-  7,
-  9
- ],
- "autoplay_event_id": 7
+  "headline": {
+    "false_alarms": {
+      "value": 0,
+      "normal_windows": 976182,
+      "scope": "certified-normal windows in the test's final third, at the derived threshold alpha*"
+    },
+    "briefs": {
+      "passed": 120,
+      "total": 120,
+      "scope": "the 120 events of the final third; brief passed by both precheck AND judge"
+    }
+  },
+  "about": {
+    "f05": 0.949,
+    "f05_scope": "full Mission-2-light test (not the minimap range)",
+    "note": "Real ESA-ADB Mission-2 data (excerpt). See NOTICE."
+  },
+  "events_total": 120,
+  "replayable_event_ids": [
+    30,
+    33,
+    36
+  ],
+  "autoplay_event_id": 33
 }
