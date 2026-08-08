@@ -12,7 +12,7 @@ export default function AlarmBanner({ flagText }: { flagText: string }) {
   const intensity = INTENSITY[intensityRaw] ?? intensityRaw;
 
   return (
-    <div className="alarm-banner pulse-red mx-4 mt-3 border border-alarm/60 bg-alarm/10 px-4 py-2.5">
+    <div className="pulse-red mx-4 mt-3 border border-alarm/60 bg-alarm/10 px-4 py-2.5">
       <div className="flex items-center gap-3 flex-wrap">
         <span className="text-alarm font-bold text-sm tracking-widest shrink-0 font-mono">
           ⬤ ALARM

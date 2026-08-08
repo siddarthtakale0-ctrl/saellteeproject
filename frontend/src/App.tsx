@@ -12,6 +12,7 @@ import EventReport from "./components/EventReport";
 import EventSelector from "./components/EventSelector";
 import MissionHeader from "./components/MissionHeader";
 import PlaybackControls from "./components/PlaybackControls";
+import Reveal from "./components/Reveal";
 import { useStore } from "./store";
 
 const PHASE: Record<string, { text: string; cls: string; dot: string }> = {
@@ -55,7 +56,9 @@ export default function App() {
     <div className="h-full flex flex-col">
       <MissionHeader mission={s.mission} missionTime={s.missionTime} speed={s.speed} />
 
-      {s.phase === "alarm" && s.flagText && <AlarmBanner flagText={s.flagText} />}
+      <Reveal show={s.phase === "alarm" && !!s.flagText}>
+        <AlarmBanner flagText={s.flagText ?? ""} />
+      </Reveal>
 
       {/* control bar: pick an event · current state · playback */}
       <div className="flex items-center gap-4 flex-wrap px-4 py-2.5 border-b border-line bg-panel">
@@ -108,9 +111,11 @@ export default function App() {
         {/* right: the report (only after the event closes) */}
         <aside className="w-[440px] shrink-0 flex flex-col gap-3 min-h-0 overflow-y-auto">
           {s.phase === "closed" && s.report ? (
-            <EventReport report={s.report} detail={s.detail} />
+            <div className="reveal-in">
+              <EventReport report={s.report} detail={s.detail} />
+            </div>
           ) : (
-            <div className="hudcard p-4 text-[13px] text-dim leading-relaxed">
+            <div className="reveal-in hudcard p-4 text-[13px] text-dim leading-relaxed">
               <b className="text-ink">What you're watching.</b> The satellite's 11 sensors
               replay under a fast clock. When the system detects an anomaly, the{" "}
               <span className="text-alarm font-semibold">alarm</span> fires and names the

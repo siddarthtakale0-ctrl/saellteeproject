@@ -113,6 +113,43 @@ body {
   animation: pulse-red 1.4s infinite;
 }
 
+/* Reveal wrapper: smooth enter (fade + slight rise) and exit (fade + fall). */
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes reveal-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.reveal-in {
+  animation: reveal-in 0.28s ease-out;
+}
+.reveal-out {
+  animation: reveal-out 0.2s ease-in forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-in,
+  .reveal-out,
+  .alarm-banner,
+  .pulse-red {
+    animation: none;
+  }
+}
+
 .md-alert h2 {
   font-size: 1rem;
   font-weight: 700;

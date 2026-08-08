@@ -35,6 +35,9 @@ export default function EventReport({
     .map((c) => c.replace("channel_", ""))
     .join(", ");
   const fam = familiarity(detail?.retrieval?.novelty);
+  // Calibrated confidence, verbatim from the m2 fact row in the alert markdown.
+  const confRaw = report.alert_md.match(/m2_confidence[^\d]*([\d.]+)/)?.[1];
+  const conf = confRaw ? `${(parseFloat(confRaw) * 100).toFixed(3)}%` : "maximum";
 
   return (
     <div className="hudcard overflow-hidden">
@@ -58,7 +61,12 @@ export default function EventReport({
             <dt className="hud-label">Culprit channels (overall)</dt>
             <dd className="text-alarm font-semibold tnum">{culprits}</dd>
             <dt className="hud-label">Confidence</dt>
-            <dd className="text-ink">maximum</dd>
+            <dd
+              className="text-ink tnum"
+              title="Calibrated (conformal): the chance this is anomalous, not a severity score. Saturated near the alpha* ceiling for every flagged event, so it does not rank them. Rank by priority (duration x intensity)."
+            >
+              {conf}
+            </dd>
             {fam && (
               <>
                 <dt className="hud-label">Archive</dt>
