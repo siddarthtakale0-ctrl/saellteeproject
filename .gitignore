@@ -238,3 +238,4 @@ CLAUDE.md
 
 # Playwright MCP session artifacts
 .playwright-mcp/
+.venv_colabmodels/

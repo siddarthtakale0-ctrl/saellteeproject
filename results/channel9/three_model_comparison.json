@@ -1,0 +1,111 @@
+{
+    "experiment": {
+        "dataset": "ESA-ADB Mission 2, channel_9",
+        "split": "70% training / 15% validation / 15% testing",
+        "threshold_selection": "Validation data only",
+        "maximum_false_positive_rate": 0.01,
+        "batch_size": 100000,
+        "note": "This script evaluates previously trained models. It does not retrain them."
+    },
+    "results": {
+        "baseline_7_features": {
+            "model": "baseline_7_features",
+            "number_of_features": 7,
+            "feature_names": [
+                "current_value",
+                "difference",
+                "absolute_difference",
+                "rolling_mean_30",
+                "rolling_std_30",
+                "rolling_mean_120",
+                "rolling_std_120"
+            ],
+            "threshold": 0.956220455303776,
+            "precision": 0.7986880796199954,
+            "recall": 0.22420471141024828,
+            "f1_score": 0.3501239464551314,
+            "pr_auc": 0.29997410071264047,
+            "false_positive_rate": 0.0016533654346307608,
+            "confusion_matrix": [
+                [
+                    1074812,
+                    1780
+                ],
+                [
+                    24436,
+                    7062
+                ]
+            ],
+            "test_observations": 1108090
+        },
+        "temporal_10_features": {
+            "model": "temporal_10_features",
+            "number_of_features": 10,
+            "feature_names": [
+                "current_value",
+                "difference",
+                "absolute_difference",
+                "rolling_mean_30",
+                "rolling_std_30",
+                "rolling_mean_120",
+                "rolling_std_120",
+                "deviation_30",
+                "deviation_120",
+                "variability_ratio"
+            ],
+            "threshold": 0.9491525577412954,
+            "precision": 0.8121979286536248,
+            "recall": 0.22407771922026795,
+            "f1_score": 0.35124912909326167,
+            "pr_auc": 0.319031228857226,
+            "false_positive_rate": 0.0015158946007401133,
+            "confusion_matrix": [
+                [
+                    1074960,
+                    1632
+                ],
+                [
+                    24440,
+                    7058
+                ]
+            ],
+            "test_observations": 1108090
+        },
+        "temporal_drift_13_features": {
+            "model": "temporal_drift_13_features",
+            "number_of_features": 13,
+            "feature_names": [
+                "current_value",
+                "difference",
+                "absolute_difference",
+                "rolling_mean_30",
+                "rolling_std_30",
+                "rolling_mean_120",
+                "rolling_std_120",
+                "deviation_30",
+                "deviation_120",
+                "variability_ratio",
+                "long_term_slope",
+                "short_long_mean_gap",
+                "cumulative_deviation"
+            ],
+            "threshold": 0.9478779691947135,
+            "precision": 0.8203861181337624,
+            "recall": 0.22664931106736935,
+            "f1_score": 0.35517412935323384,
+            "pr_auc": 0.3337097996503691,
+            "false_positive_rate": 0.0014518034687235276,
+            "confusion_matrix": [
+                [
+                    1075029,
+                    1563
+                ],
+                [
+                    24359,
+                    7139
+                ]
+            ],
+            "test_observations": 1108090
+        }
+    }
+}

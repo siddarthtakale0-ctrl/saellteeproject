@@ -1,0 +1,52 @@
+{
+    "experiment": {
+        "dataset": "ESA-ADB Mission 2, channel_9",
+        "split": "70% training / 15% validation / 15% testing",
+        "threshold_selection": "Validation data only",
+        "maximum_false_positive_rate": 0.01,
+        "batch_size": 100000,
+        "random_state": 42
+    },
+    "baseline_7_features": {
+        "model": "Baseline Random Forest (7 features)",
+        "number_of_features": 7,
+        "threshold": 0.9562204553037759,
+        "precision": 0.7986880796199954,
+        "recall": 0.22420471141024828,
+        "f1_score": 0.3501239464551314,
+        "pr_auc": 0.2999747158556862,
+        "false_positive_rate": 0.0016533654346307608,
+        "confusion_matrix": [
+            [
+                1074812,
+                1780
+            ],
+            [
+                24436,
+                7062
+            ]
+        ],
+        "test_observations": 1108090
+    },
+    "improved_13_features": {
+        "model": "Improved Random Forest (13 features)",
+        "number_of_features": 13,
+        "threshold": 0.9478779691947135,
+        "precision": 0.8203861181337624,
+        "recall": 0.22664931106736935,
+        "f1_score": 0.35517412935323384,
+        "pr_auc": 0.3337100281723785,
+        "false_positive_rate": 0.0014518034687235276,
+        "confusion_matrix": [
+            [
+                1075029,
+                1563
+            ],
+            [
+                24359,
+                7139
+            ]
+        ],
+        "test_observations": 1108090
+    }
+}
